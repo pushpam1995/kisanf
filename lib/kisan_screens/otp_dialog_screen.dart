@@ -5,11 +5,15 @@ import 'package:kisan_dost_app/getotpresponse/getotpresponseservice.dart';
 import 'package:kisan_dost_app/kisan_models/otp_ver_model.dart';
 import 'package:kisan_dost_app/kisan_screens/signup_screen.dart';
 import 'package:kisan_dost_app/kisan_services/user_service.dart';
+import 'package:kisan_dost_app/verifyotp/otpveryfymodel.dart';
+import 'package:kisan_dost_app/verifyotp/otpveryfysevices.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpDialog extends StatefulWidget {
   final String userPhoneNumber;
   final String userDeviceId;
+  
+
 
   OtpDialog(this.userPhoneNumber, this.userDeviceId);
 
@@ -20,6 +24,8 @@ class OtpDialog extends StatefulWidget {
 class _OtpDialogState extends State<OtpDialog> {
   TextEditingController otpController = TextEditingController();
   UserService otpService = new UserService();
+  Future<OtpVerify>? _futureAlbum;
+  int i=0;
 
   @override
   Widget build(BuildContext context) {
@@ -76,63 +82,17 @@ class _OtpDialogState extends State<OtpDialog> {
             SizedBox(height: 10.0),
             Align(
               alignment: Alignment.bottomCenter,
-              child: RaisedButton(
+              child:  (_futureAlbum == null) ?RaisedButton(
                 padding: EdgeInsets.all(10.0),
                 color: Colors.lightGreen,
                 elevation: 8.0,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30)),
                 onPressed: () {
-
-                  getOtpResponseService().then((value) => {
-                    if(value.id!=null){
-                      Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SignUpScreen(
-                            phoneNumber: widget.userPhoneNumber,
-                            deviceId: widget.userDeviceId,
-                          ))),
-                    }
-                    else{
-                      print("no response coming.........")
-                    }
+                  setState(() {
+                    _futureAlbum = verifyOtp(otpController.text);
                   });
-                 /* var otpVerifyResponse = UserService().validateOtp(
-                      OtpVerModel.otpResponse(
-                          userPhoneNumber: widget.userPhoneNumber,
-                          userDeviceId: widget.userDeviceId,
-                          userOtp: otpController.text.toString()));
-                  if (otpVerifyResponse != null) {
-                    print('Moving to Signup page');
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => SignUpScreen(
-                                  phoneNumber: widget.userPhoneNumber,
-                                  deviceId: widget.userDeviceId,
-                                )));
-                  }*/
 
-                  /* otpVerifyResponse.then((otpResponse)  {
-                        print(otpResponse);
-
-                    prefs.setInt("userId",otpResponse.payload.userId);
-                        if (otpResponse != null && otpResponse.payload == null)
-                          {
-                            print('Moving to Signup page');
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SignUpScreen(
-                                        phoneNumber:
-                                            widget.userOtpDetails.phoneNumber)))
-                          }
-                        else
-                          {
-                            print('Moving to Home page');
-                          }
-                      });*/
                 },
                 child: Text(
                   'SUBMIT',
@@ -141,7 +101,7 @@ class _OtpDialogState extends State<OtpDialog> {
                     color: Colors.white,
                   ),
                 ),
-              ),
+              ):i==0?buildFutureBuilder(context):Container(),
             ),
             SizedBox(height: 30.0),
             Align(
@@ -163,6 +123,32 @@ class _OtpDialogState extends State<OtpDialog> {
           ],
         ),
       ),
+    );
+  }
+
+  FutureBuilder<OtpVerify> buildFutureBuilder(contextpop) {
+    return FutureBuilder<OtpVerify>(
+      future: _futureAlbum,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+
+i=i+2;
+          WidgetsBinding.instance!.addPostFrameCallback((_){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => SignUpScreen(
+                      phoneNumber: widget.userPhoneNumber,
+                      deviceId: widget.userDeviceId,
+                    )));
+          });
+Navigator.pop(contextpop);
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+
+        return CircularProgressIndicator();
+      },
     );
   }
 }

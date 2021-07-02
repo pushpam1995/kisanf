@@ -7,10 +7,15 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:kisan_dost_app/getotpresponse/getotpresponsemodel.dart';
+import 'package:kisan_dost_app/getotpresponse/getotpresponseservice.dart';
 
 import 'otp_dialog_screen.dart';
 
 class OtpVerify extends StatefulWidget {
+  BuildContext con;
+  OtpVerify(this.con);
+
 
 
   @override
@@ -20,18 +25,14 @@ class OtpVerify extends StatefulWidget {
 class _OtpVerifyState extends State<OtpVerify> {
   final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   TextEditingController phnumberController = TextEditingController();
-
+  Future<GetOtpModel>? _futureAlbum;
   late String deviceId;
+  int i=0;
   //String phnumber, phoneNumber;
   //OtpModel userDetails = new OtpModel();
   // UserService otpService = new UserService();
 
-  @override
-  void initState() {
-    super.initState();
-    getId();
-    //String userDeviceId = await _getId();
-  }
+
 
   Future<String> getId() async {
     // var deviceInfo = DeviceInfoPlugin();
@@ -50,9 +51,49 @@ class _OtpVerifyState extends State<OtpVerify> {
   }
 
   var otpGenerationResponse;
+ void func(){
+   setState(() {
+     i=0;
+_futureAlbum=null;
+     _futureAlbum = createOtp(phnumberController.text,deviceId);
+   });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getId();
+    i=0;
+    print("initState");
+  }
+
+  /*
+    This method is called immediately after initState on the first time the widget is built.
+    */
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print("didChangeDependencies");
+    setState(() {
+      _futureAlbum = null;
+      i=2;
+    });
+
+
+
+  }
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    print("deactive");
+  }
 
   @override
   Widget build(BuildContext context) {
+
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -122,7 +163,7 @@ class _OtpVerifyState extends State<OtpVerify> {
             SizedBox(
               height: 10.0,
             ),
-            RaisedButton(
+            (_futureAlbum == null)? RaisedButton(
                 padding: const EdgeInsets.all(10.0),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
@@ -133,40 +174,43 @@ class _OtpVerifyState extends State<OtpVerify> {
                 ),
                 elevation: 7.0,
                 color: Colors.lightGreen,
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return OtpDialog(phnumberController.text.toString(),
-                            deviceId.toString());
-                      });
+                onPressed:func,):i==0?buildFutureBuilder(context):Container(),
 
 
-
-                  /*setState(() {
-                    otpGenerationResponse = UserService()
-                        .generateOtp(OtpVerModel(
-                            userPhoneNumber: phnumberController.text.toString(),
-                            userDeviceId: deviceId.toString()))
-                        .then((value) {
-                      if (value == "200") {
-                        print('dialog is opening');
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return OtpDialog(
-                                  phnumberController.text.toString(),
-                                  deviceId.toString());
-                            });
-                      } else {
-                        print('OTP generation failed dialog');
-                      }
-                    });
-                  });*/
-                }),
           ],
         ),
       ),
     );
   }
+
+  FutureBuilder<GetOtpModel> buildFutureBuilder(contextw) {
+    return FutureBuilder<GetOtpModel>(
+      future: _futureAlbum,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+        i=i+1;
+        WidgetsBinding.instance!.addPostFrameCallback((_){
+
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                   return Center(
+                     child: OtpDialog(phnumberController.text.toString(),
+                        deviceId.toString()),
+                   );
+                });
+
+          });
+      //  Navigator.pop(contextw);
+       // Navigator.pop(widget.con);
+
+        } else if (snapshot.hasError) {
+         // return Text('${snapshot.error}');
+        }
+
+        return CircularProgressIndicator();
+      },
+    );
+  }
+
 }

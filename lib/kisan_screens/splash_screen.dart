@@ -51,12 +51,12 @@ class _SplashScreenState extends State<SplashScreen>
     final SharedPreferences UserData = await SharedPreferences.getInstance();
     if (UserData == null) {
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => OtpVerify()));
+          context, MaterialPageRoute(builder: (context) => OtpVerify(context)));
       return "user goes for otp verification";
     } else {
       print('user is there');
       Navigator.push(
-          context, MaterialPageRoute(builder: (context) => OtpVerify()));
+          context, MaterialPageRoute(builder: (context) => OtpVerify(context)));
       return "user goes for otp verification";
     }
   }

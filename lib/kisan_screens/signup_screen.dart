@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:kisan_dost_app/getregisteruserresponse/registerationmodel.dart';
+import 'package:kisan_dost_app/getregisteruserresponse/registrationservices.dart';
 import 'package:kisan_dost_app/kisan_screens_customer/main.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/main123.dart';
 import 'package:kisan_dost_app/kisan_services/user_service.dart';
-
 
 class SignUpScreen extends StatefulWidget {
   final String phoneNumber;
   final String deviceId;
 
 
-  SignUpScreen({ required this.phoneNumber, required this.deviceId});
+  SignUpScreen(
+      {required this.phoneNumber, required this.deviceId,});
 
   @override
   State<StatefulWidget> createState() => LunchState();
@@ -17,17 +19,49 @@ class SignUpScreen extends StatefulWidget {
 
 class LunchState extends State<SignUpScreen> {
   UserService otpService = new UserService();
+                 int i=0;
   //String userType="Register as";
- // UserResponseModel userResponseModel = new UserResponseModel(message: '');
+  // UserResponseModel userResponseModel = new UserResponseModel(message: '');
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  Future<RegistrationModel>? _futureAlbum;
 
   TextEditingController usertypeController = TextEditingController();
   String userType = "Register as";
+  String CheckUserType="NAN";
+
   void changeCat(value) {
     setState(() {
       userType = value;
+      CheckUserType=value;
+    });
+  }
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    print("didChangeDependencies");
+    setState(() {
+      i=3;
+     _futureAlbum=null;
+    });
+
+
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+   
+    //  Navigator.pop(widget.contextpop);
+  }
+
+  void homeScreen(){
+    setState(() {
+      i=0;
+       _futureAlbum=null;     
+      _futureAlbum = registerUser(widget.phoneNumber,widget.deviceId,nameController.text,emailController.text,userType);
     });
   }
 
@@ -117,19 +151,18 @@ class LunchState extends State<SignUpScreen> {
           margin: EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
           padding: const EdgeInsets.all(20.0),
           child: DropdownButton(
-           // value: userType,
+            // value: userType,
             style: TextStyle(color: Colors.green, fontSize: 30.0),
             icon: Icon(Icons.keyboard_arrow_down),
-            items: <String>['SHOP ', 'FARMER ', 'CUSTOMER ']
+            items: <String>['SHOP', 'FARMER', 'CUSTOMER']
                 .map<DropdownMenuItem<String>>((String value) {
-
               return DropdownMenuItem<String>(
                 value: value,
                 child: Text(value),
               );
             }).toList(),
             hint: Text(
-             userType,
+              userType,
               style: TextStyle(
                   color: Colors.green,
                   fontSize: 30,
@@ -141,41 +174,8 @@ class LunchState extends State<SignUpScreen> {
         Center(
             child: Container(
                 margin: EdgeInsets.only(top: 30.0),
-                child: RaisedButton(
-
-
-                  onPressed: () {
-                    print("what is user typ :  " + userType);
-
-
-                /*   Navigator.push(context,
-                          MaterialPageRoute(
-                              builder: (context) => FarmerShop()));
-*/
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => CustomerScreen()));
-                    /*SignupModel userDetails = SignupModel(
-                        phoneNumber: widget.phoneNumber,
-                        deviceId: widget.deviceId,
-                        userId: null,
-                        name: nameController.text,
-                        userType: widget.userType,
-                        email: emailController.text,
-                        createdDate: null,
-                        status: null);
-
-                    print("filling user details ${userDetails.toJson()}");
-
-                    Future<UserResponseModel> signUpResponse =
-                        otpService.signUp(userDetails);
-                    signUpResponse.then((signResponse) => {
-                          if (signResponse != null &&
-                              signResponse.statusCode == 201)
-                            {print("User created")}
-                          else
-                            {print("Error occurred")}
-                        });*/
-                  }, // When Click on Button goto Login Screen
+                child: (_futureAlbum == null)? RaisedButton(
+                  onPressed:homeScreen, // When Click on Button goto Login Screen
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(80.0)),
                   padding: const EdgeInsets.all(0.0),
@@ -196,7 +196,7 @@ class LunchState extends State<SignUpScreen> {
                       ),
                     ),
                   ),
-                ))),
+                ):i==0?buildFutureBuilder(context):Container(),),),
         Center(
             child: Container(
                 margin: EdgeInsets.only(top: 20.0),
@@ -221,6 +221,42 @@ class LunchState extends State<SignUpScreen> {
                   ],
                 )))
       ],
+    );
+  }
+  FutureBuilder<RegistrationModel> buildFutureBuilder(contextw) {
+    return FutureBuilder<RegistrationModel>(
+      future: _futureAlbum,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+                              i=i+2;
+          WidgetsBinding.instance!.addPostFrameCallback((_){
+            if (CheckUserType == "FARMER") {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FarmerShop()));
+            }
+            if (CheckUserType == "CUSTOMER") {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CustomerScreen()));
+            }
+            if (CheckUserType == "SHOP") {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => FarmerShop()));
+            }
+
+          });
+            Navigator.pop(contextw);
+        } else if (snapshot.hasError) {
+          // return Text('${snapshot.error}');
+        }
+
+        return CircularProgressIndicator();
+      },
     );
   }
 }
