@@ -4,6 +4,7 @@ import 'package:kisan_dost_app/getregisteruserresponse/registrationservices.dart
 import 'package:kisan_dost_app/kisan_screens_customer/main.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/main123.dart';
 import 'package:kisan_dost_app/kisan_services/user_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignUpScreen extends StatefulWidget {
   final String phoneNumber;
@@ -62,6 +63,7 @@ class LunchState extends State<SignUpScreen> {
       i=0;
        _futureAlbum=null;     
       _futureAlbum = registerUser(widget.phoneNumber,widget.deviceId,nameController.text,emailController.text,userType);
+
     });
   }
 
@@ -228,8 +230,22 @@ class LunchState extends State<SignUpScreen> {
       future: _futureAlbum,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-                              i=i+2;
+          i=i+2;
+          if(snapshot.data!.payload!=null) {
+            final information = SharedPreferences.getInstance();
+            information.then((value) {
+              value.setString("name", snapshot.data!.payload!.name);
+              value.setString("email", snapshot.data!.payload!.email);
+              value.setString(
+                  "phoneNumber", snapshot.data!.payload!.phoneNumber);
+              value.setString("userType", snapshot.data!.payload!.userType);
+              value.setInt("userId", snapshot.data!.payload!.userId);
+            });
+          }
+          print("RegistrationModel future response ");
           WidgetsBinding.instance!.addPostFrameCallback((_){
+
+
             if (CheckUserType == "FARMER") {
               Navigator.push(
                   context,

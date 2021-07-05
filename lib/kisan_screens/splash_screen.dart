@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kisan_dost_app/kisan_screens_customer/main.dart';
+import 'package:kisan_dost_app/kisan_screens_shop/main123.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'otp_screen.dart';
@@ -47,17 +49,38 @@ class _SplashScreenState extends State<SplashScreen>
     return new Timer(duration, getUserInfo);
   }
 
-  Future<String> getUserInfo() async {
+  void getUserInfo() async {
     final SharedPreferences UserData = await SharedPreferences.getInstance();
-    if (UserData == null) {
+    final name=UserData.getString("name")??0;
+    final email=UserData.getString("email")??0;
+    final phone=UserData.getString("phoneNumber")??0;
+    final userType=UserData.getString("userType")??0;
+    if (name == 0) {
+      print("not a user");
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => OtpVerify(context)));
-      return "user goes for otp verification";
+
     } else {
       print('user is there');
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => OtpVerify(context)));
-      return "user goes for otp verification";
+
+      if (userType == "FARMER") {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => FarmerShop()));
+      }
+      if (userType == "CUSTOMER") {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => CustomerScreen()));
+      }
+      if (userType == "SHOP") {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => FarmerShop()));
+      }
     }
   }
 
