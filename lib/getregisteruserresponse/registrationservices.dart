@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:kisan_dost_app/getregisteruserresponse/registerationmodel.dart';
 
-Future<RegistrationModel> registerUser(String phoneNumber,String deviceId,String name,String email,String usertype) async {
+Future<RegistrationModel> registerUser(String phoneNumber, String deviceId,
+    String name, String email, String usertype) async {
   final response = await http.post(
-    Uri.parse('http://kisandosth-elb-1255426508.ap-south-1.elb.amazonaws.com/user'),
+    Uri.parse(
+        'http://kisandosth-elb-1255426508.ap-south-1.elb.amazonaws.com/user'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
@@ -13,7 +15,7 @@ Future<RegistrationModel> registerUser(String phoneNumber,String deviceId,String
       "name": name,
       "phoneNumber": phoneNumber,
       "userType": usertype,
-      "email": email, 
+      "email": email,
       "deviceId": deviceId,
       "status": null,
       "createdDate": null
@@ -23,7 +25,8 @@ Future<RegistrationModel> registerUser(String phoneNumber,String deviceId,String
   if (response.statusCode == 200) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
-    //  print("this is your response "+RegistrationModel.fromJson(jsonDecode(response.body)));
+    print(
+        "this is your response ${RegistrationModel.fromJson(jsonDecode(response.body)).payload!.phoneNumber.toString()}");
     return RegistrationModel.fromJson(jsonDecode(response.body));
   } else {
     // If the server did not return a 201 CREATED response,

@@ -1,17 +1,21 @@
-
 class RegistrationModel {
   int? statusCode;
-String? message;
+  String? message;
   Payload? payload;
-  String?timeStamp;
+  String? timeStamp;
 
-  RegistrationModel({required this.statusCode, required this.message, required this.payload, required this.timeStamp});
+  RegistrationModel(
+      {required this.statusCode,
+      required this.message,
+      required this.payload,
+      required this.timeStamp});
 
   RegistrationModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     message = json['message'];
-    payload =
-    (json['payload'] != null ? new Payload.fromJson(json['payload']) : null)!;
+    payload = (json['payload'] != null
+        ? new Payload.fromJson(json['payload'])
+        : null)!;
     timeStamp = json['timeStamp'];
   }
 
@@ -40,14 +44,14 @@ class Payload {
 
   Payload(
       {required this.userId,
-        required this.name,
-        required this.phoneNumber,
-        required this.userType,
-        required this.email,
-        required this.deviceId,
-        required this.status,
-        required this.imageUrl,
-        required this.createdDate});
+      required this.name,
+      required this.phoneNumber,
+      required this.userType,
+      required this.email,
+      required this.deviceId,
+      required this.status,
+      required this.imageUrl,
+      required this.createdDate});
 
   Payload.fromJson(Map<String, dynamic> json) {
     userId = json['userId'];
