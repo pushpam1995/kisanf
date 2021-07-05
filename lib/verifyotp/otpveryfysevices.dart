@@ -4,18 +4,19 @@ import 'package:http/http.dart' as http;
 import 'otpveryfymodel.dart';
 
 
-Future<OtpVerify> verifyOtp(String title) async {
+Future<OtpVerify> verifyOtp(String otp,String phoneNo) async {
   final response = await http.post(
-    Uri.parse('https://jsonplaceholder.typicode.com/albums'),
+    Uri.parse('http://kisandosth-elb-1255426508.ap-south-1.elb.amazonaws.com/user/otp/verify'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String, String>{
-      'title': title,
+      "phoneNumber": phoneNo,
+       "otp": otp
     }),
   );
 
-  if (response.statusCode == 201) {
+  if (response.statusCode == 200) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
     return OtpVerify.fromJson(jsonDecode(response.body));

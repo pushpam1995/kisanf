@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:kisan_dost_app/getotpresponse/getotpresponseservice.dart';
 import 'package:kisan_dost_app/kisan_models/otp_ver_model.dart';
 import 'package:kisan_dost_app/kisan_screens/signup_screen.dart';
+import 'package:kisan_dost_app/kisan_screens_customer/main.dart';
+import 'package:kisan_dost_app/kisan_screens_shop/main123.dart';
 import 'package:kisan_dost_app/kisan_services/user_service.dart';
 import 'package:kisan_dost_app/verifyotp/otpveryfymodel.dart';
 import 'package:kisan_dost_app/verifyotp/otpveryfysevices.dart';
@@ -12,8 +14,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class OtpDialog extends StatefulWidget {
   final String userPhoneNumber;
   final String userDeviceId;
-  
-
 
   OtpDialog(this.userPhoneNumber, this.userDeviceId);
 
@@ -25,7 +25,7 @@ class _OtpDialogState extends State<OtpDialog> {
   TextEditingController otpController = TextEditingController();
   UserService otpService = new UserService();
   Future<OtpVerify>? _futureAlbum;
-  int i=0;
+  int i = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -82,26 +82,30 @@ class _OtpDialogState extends State<OtpDialog> {
             SizedBox(height: 10.0),
             Align(
               alignment: Alignment.bottomCenter,
-              child:  (_futureAlbum == null) ?RaisedButton(
-                padding: EdgeInsets.all(10.0),
-                color: Colors.lightGreen,
-                elevation: 8.0,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)),
-                onPressed: () {
-                  setState(() {
-                    _futureAlbum = verifyOtp(otpController.text);
-                  });
-
-                },
-                child: Text(
-                  'SUBMIT',
-                  style: TextStyle(
-                    fontSize: 30.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ):i==0?buildFutureBuilder(context):Container(),
+              child: (_futureAlbum == null)
+                  ? RaisedButton(
+                      padding: EdgeInsets.all(10.0),
+                      color: Colors.lightGreen,
+                      elevation: 8.0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30)),
+                      onPressed: () {
+                        setState(() {
+                          _futureAlbum = verifyOtp(
+                              otpController.text, widget.userPhoneNumber);
+                        });
+                      },
+                      child: Text(
+                        'SUBMIT',
+                        style: TextStyle(
+                          fontSize: 30.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  : i == 0
+                      ? buildFutureBuilder(context)
+                      : Container(),
             ),
             SizedBox(height: 30.0),
             Align(
@@ -131,18 +135,44 @@ class _OtpDialogState extends State<OtpDialog> {
       future: _futureAlbum,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-
-i=i+2;
-          WidgetsBinding.instance!.addPostFrameCallback((_){
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => SignUpScreen(
-                      phoneNumber: widget.userPhoneNumber,
-                      deviceId: widget.userDeviceId,
-                    )));
-          });
-Navigator.pop(contextpop);
+          i = i + 2;
+          if (snapshot.data!.payload != null) {
+            if (snapshot.data!.payload!.userType == "FARMER") {
+              WidgetsBinding.instance!.addPostFrameCallback((_) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FarmerShop()));
+              });
+            }
+            if (snapshot.data!.payload!.userType == "CUSTOMER") {
+              WidgetsBinding.instance!.addPostFrameCallback((_) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CustomerScreen()));
+              });
+            }
+            if (snapshot.data!.payload!.userType == "SHOP") {
+              WidgetsBinding.instance!.addPostFrameCallback((_) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => FarmerShop()));
+              });
+            }
+          } else {
+            WidgetsBinding.instance!.addPostFrameCallback((_) {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => SignUpScreen(
+                            phoneNumber: widget.userPhoneNumber,
+                            deviceId: widget.userDeviceId,
+                          )));
+            });
+         }
+          Navigator.pop(contextpop);
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');
         }

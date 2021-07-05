@@ -11,7 +11,7 @@ String? message;
     statusCode = json['statusCode'];
     message = json['message'];
     payload =
-    (json['payload'] != null ? new Payload.fromJson(json['payload']) : null)!;
+    (json['payload'] == null ? null:new Payload.fromJson(json['payload']) )!;
     timeStamp = json['timeStamp'];
   }
 
@@ -75,3 +75,18 @@ class Payload {
     return data;
   }
 }
+
+/*
+class RegistrationModel {
+  final int id;
+  final String title;
+
+  RegistrationModel({required this.id, required this.title});
+
+  factory RegistrationModel.fromJson(Map<String, dynamic> json) {
+    return RegistrationModel(
+      id: json['id'],
+      title: json['title'],
+    );
+  }
+}*/
