@@ -13,14 +13,14 @@ class RegistrationModel {
   RegistrationModel.fromJson(Map<String, dynamic> json) {
     statusCode = json['statusCode'];
     message = json['message'];
-<<<<<<< HEAD
+
     payload = (json['payload'] != null
         ? new Payload.fromJson(json['payload'])
         : null)!;
-=======
-    payload =
-    (json['payload'] == null ? null:new Payload.fromJson(json['payload']) )!;
->>>>>>> 648daad3464f014ed660550c600e4a224be1405b
+    payload = (json['payload'] == null
+        ? null
+        : new Payload.fromJson(json['payload']))!;
+
     timeStamp = json['timeStamp'];
   }
 

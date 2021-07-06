@@ -35,7 +35,7 @@ class _FarmerScreenDesignState extends State<FarmerScreenDesign> {
               return ItemListInsideCustomerScreen();
             }));
           },
-          icon: Icon(Icons.shopping_cart_outlined),
+          icon: Icon(Icons.logout),
         ),
       ],
     );
@@ -84,7 +84,7 @@ class _FarmerScreenDesignState extends State<FarmerScreenDesign> {
                         borderRadius: BorderRadius.all(Radius.circular(20.0))),
                     onPressed: () {},
                     child: Text(
-                      "Purchas",
+                      "Purchase",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -139,16 +139,16 @@ class _FarmerScreenDesignState extends State<FarmerScreenDesign> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.shopping_basket),
+            label: 'My Orders',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_box_rounded),
-            label: 'Account',
+            label: 'My Account',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_basket),
-            label: 'Cart',
+            icon: Icon(Icons.shopping_cart_outlined),
+            label: 'My Cart',
           ),
         ],
         currentIndex: _selectedIndex,

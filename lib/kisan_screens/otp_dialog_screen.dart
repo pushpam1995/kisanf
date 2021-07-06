@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:kisan_dost_app/getotpresponse/getotpresponseservice.dart';
-import 'package:kisan_dost_app/kisan_models/otp_ver_model.dart';
 import 'package:kisan_dost_app/kisan_screens/signup_screen.dart';
 import 'package:kisan_dost_app/kisan_screens_customer/main.dart';
+import 'package:kisan_dost_app/kisan_screens_farmer/main.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/main123.dart';
 import 'package:kisan_dost_app/kisan_services/user_service.dart';
 import 'package:kisan_dost_app/verifyotp/otpveryfymodel.dart';
 import 'package:kisan_dost_app/verifyotp/otpveryfysevices.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OtpDialog extends StatefulWidget {
   final String userPhoneNumber;
@@ -139,26 +137,20 @@ class _OtpDialogState extends State<OtpDialog> {
           if (snapshot.data!.payload != null) {
             if (snapshot.data!.payload!.userType == "FARMER") {
               WidgetsBinding.instance!.addPostFrameCallback((_) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FarmerShop()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FarmerScreen()));
               });
             }
             if (snapshot.data!.payload!.userType == "CUSTOMER") {
               WidgetsBinding.instance!.addPostFrameCallback((_) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CustomerScreen()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => CustomerScreen()));
               });
             }
             if (snapshot.data!.payload!.userType == "SHOP") {
               WidgetsBinding.instance!.addPostFrameCallback((_) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => FarmerShop()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => FarmerShop()));
               });
             }
           } else {
@@ -171,7 +163,7 @@ class _OtpDialogState extends State<OtpDialog> {
                             deviceId: widget.userDeviceId,
                           )));
             });
-         }
+          }
           Navigator.pop(contextpop);
         } else if (snapshot.hasError) {
           return Text('${snapshot.error}');

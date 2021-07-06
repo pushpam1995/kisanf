@@ -24,7 +24,7 @@ Future<RegistrationModel> registerUser(String phoneNumber, String deviceId,
   );
 
   if (response.statusCode == 201) {
-print("correct response :  dsdsdsdsdsdsdaasaa");
+    print("correct response :  dsdsdsdsdsdsdaasaa");
     return RegistrationModel.fromJson(jsonDecode(response.body));
   } else {
     // If the server did not return a 201 CREATED response,
@@ -65,4 +65,3 @@ Future<RegistrationModel> registerUser(String phoneNumber,String deviceId,String
 }
 =======
 }*/
->>>>>>> 648daad3464f014ed660550c600e4a224be1405b

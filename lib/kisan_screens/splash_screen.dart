@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kisan_dost_app/kisan_screens_customer/main.dart';
+import 'package:kisan_dost_app/kisan_screens_farmer/main.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/main123.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -14,8 +15,8 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   var _visible = true;
 
- late AnimationController animationController;
- late Animation<double> animation;
+  late AnimationController animationController;
+  late Animation<double> animation;
   //UserDetails payload;
   // SharedPreferences Userdata;
   String? SHOP, FARMER, CUSTOMER;
@@ -51,35 +52,28 @@ class _SplashScreenState extends State<SplashScreen>
 
   void getUserInfo() async {
     final SharedPreferences UserData = await SharedPreferences.getInstance();
-    final name=UserData.getString("name")??0;
-    final email=UserData.getString("email")??0;
-    final phone=UserData.getString("phoneNumber")??0;
-    final userType=UserData.getString("userType")??0;
+    final name = UserData.getString("name") ?? 0;
+    final email = UserData.getString("email") ?? 0;
+    final phone = UserData.getString("phoneNumber") ?? 0;
+    final userType = UserData.getString("userType") ?? 0;
     if (name == 0) {
       print("not a user");
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => OtpVerify(context)));
-
     } else {
       print('user is there');
 
       if (userType == "FARMER") {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => FarmerShop()));
+            context, MaterialPageRoute(builder: (context) => FarmerScreen()));
       }
       if (userType == "CUSTOMER") {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CustomerScreen()));
+            context, MaterialPageRoute(builder: (context) => CustomerScreen()));
       }
       if (userType == "SHOP") {
         Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => FarmerShop()));
+            context, MaterialPageRoute(builder: (context) => FarmerShop()));
       }
     }
   }

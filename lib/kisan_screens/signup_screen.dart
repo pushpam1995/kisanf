@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kisan_dost_app/getregisteruserresponse/registerationmodel.dart';
 import 'package:kisan_dost_app/getregisteruserresponse/registrationservices.dart';
 import 'package:kisan_dost_app/kisan_screens_customer/main.dart';
+import 'package:kisan_dost_app/kisan_screens_farmer/main.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/main123.dart';
 import 'package:kisan_dost_app/kisan_services/user_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,9 +11,10 @@ class SignUpScreen extends StatefulWidget {
   final String phoneNumber;
   final String deviceId;
 
-
-  SignUpScreen(
-      {required this.phoneNumber, required this.deviceId,});
+  SignUpScreen({
+    required this.phoneNumber,
+    required this.deviceId,
+  });
 
   @override
   State<StatefulWidget> createState() => LunchState();
@@ -20,7 +22,7 @@ class SignUpScreen extends StatefulWidget {
 
 class LunchState extends State<SignUpScreen> {
   UserService otpService = new UserService();
-                 int i=0;
+  int i = 0;
   //String userType="Register as";
   // UserResponseModel userResponseModel = new UserResponseModel(message: '');
   TextEditingController nameController = TextEditingController();
@@ -30,40 +32,40 @@ class LunchState extends State<SignUpScreen> {
 
   TextEditingController usertypeController = TextEditingController();
   String userType = "Register as";
-  String CheckUserType="NAN";
+  String CheckUserType = "NAN";
 
   void changeCat(value) {
     setState(() {
       userType = value;
-      CheckUserType=value;
+      CheckUserType = value;
     });
   }
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     print("didChangeDependencies");
     setState(() {
-      i=3;
-     _futureAlbum=null;
+      i = 3;
+      _futureAlbum = null;
     });
-
-
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-   
+
     //  Navigator.pop(widget.contextpop);
   }
 
-  void homeScreen(){
+  void homeScreen() {
     setState(() {
-      i=0;
-       _futureAlbum=null;     
-      _futureAlbum = registerUser(widget.phoneNumber,widget.deviceId,nameController.text,emailController.text,userType);
-
+      i = 0;
+      _futureAlbum = null;
+      _futureAlbum = registerUser(widget.phoneNumber, widget.deviceId,
+          nameController.text, emailController.text, userType);
     });
   }
 
@@ -174,64 +176,50 @@ class LunchState extends State<SignUpScreen> {
           ),
         ),
         Center(
-            child: Container(
-                margin: EdgeInsets.only(top: 30.0),
-                child: (_futureAlbum == null)? RaisedButton(
-                  onPressed:homeScreen, // When Click on Button goto Login Screen
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(80.0)),
-                  padding: const EdgeInsets.all(0.0),
-                  child: Ink(
-                    padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-                    decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.all(Radius.circular(30.0))),
-                    child: Container(
-                      constraints: const BoxConstraints(
-                          maxWidth: 200.0,
-                          minHeight: 40.0), // min sizes for Material buttons
-                      alignment: Alignment.center,
-                      child: const Text(
-                        'Sign Up',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white, fontSize: 30.0),
+          child: Container(
+            margin: EdgeInsets.only(top: 30.0),
+            child: (_futureAlbum == null)
+                ? RaisedButton(
+                    onPressed:
+                        homeScreen, // When Click on Button goto Login Screen
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(80.0)),
+                    padding: const EdgeInsets.all(0.0),
+                    child: Ink(
+                      padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                      decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(30.0))),
+                      child: Container(
+                        constraints: const BoxConstraints(
+                            maxWidth: 200.0,
+                            minHeight: 40.0), // min sizes for Material buttons
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'Sign Up',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white, fontSize: 30.0),
+                        ),
                       ),
                     ),
-                  ),
-                ):i==0?buildFutureBuilder(context):Container(),),),
-        Center(
-            child: Container(
-                margin: EdgeInsets.only(top: 20.0),
-                padding: EdgeInsets.only(bottom: 30.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      "Already have an account? ",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                    GestureDetector(
-                      child: Text(
-                        "  Login",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, color: Colors.green),
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                    )
-                  ],
-                )))
+                  )
+                : i == 0
+                    ? buildFutureBuilder(context)
+                    : Container(),
+          ),
+        ),
       ],
     );
   }
+
   FutureBuilder<RegistrationModel> buildFutureBuilder(contextw) {
     return FutureBuilder<RegistrationModel>(
       future: _futureAlbum,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          i=i+2;
-          if(snapshot.data!.payload!=null) {
+          i = i + 2;
+          if (snapshot.data!.payload != null) {
             final information = SharedPreferences.getInstance();
             information.then((value) {
               value.setString("name", snapshot.data!.payload!.name);
@@ -243,30 +231,21 @@ class LunchState extends State<SignUpScreen> {
             });
           }
           print("RegistrationModel future response ");
-          WidgetsBinding.instance!.addPostFrameCallback((_){
-
-
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
             if (CheckUserType == "FARMER") {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => FarmerShop()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => FarmerScreen()));
             }
             if (CheckUserType == "CUSTOMER") {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => CustomerScreen()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => CustomerScreen()));
             }
             if (CheckUserType == "SHOP") {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => FarmerShop()));
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => FarmerShop()));
             }
-
           });
-            Navigator.pop(contextw);
+          Navigator.pop(contextw);
         } else if (snapshot.hasError) {
           // return Text('${snapshot.error}');
         }
