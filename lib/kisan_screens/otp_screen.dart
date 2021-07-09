@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kisan_dost_app/getotpresponse/getotpresponsemodel.dart';
 import 'package:kisan_dost_app/getotpresponse/getotpresponseservice.dart';
+import 'package:kisan_dost_app/kisan_screens_farmer/userprofile.dart';
 
 import 'otp_dialog_screen.dart';
 
@@ -52,11 +53,14 @@ class _OtpVerifyState extends State<OtpVerify> {
 
   var otpGenerationResponse;
  void func(){
-   setState(() {
+   Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+     return ProfileUI2();
+   }));
+  /* setState(() {
      i=0;
 _futureAlbum=null;
      _futureAlbum = createOtp(phnumberController.text,deviceId);
-   });
+   });*/
   }
 
   @override

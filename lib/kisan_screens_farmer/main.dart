@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:kisan_dost_app/kisan_screens_farmer/userprofile.dart';
 
 import 'ItemListInsideCustomerScreen.dart';
 
@@ -162,7 +163,14 @@ class _FarmerScreenDesignState extends State<FarmerScreenDesign> {
     setState(() {
       _selectedIndex = index;
     });
+
+    if(index==1){
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+        return ProfileUI2();
+      }));
+    }
   }
+
 
   int _selectedIndex = 0;
 }

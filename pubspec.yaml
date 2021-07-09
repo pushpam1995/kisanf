@@ -29,6 +29,10 @@ dependencies:
   http: ^0.13.3
   carousel_pro: ^1.0.0
   upi_india: ^3.0.1
+  google_maps_flutter: ^2.0.6
+  geolocator: ^7.0.3
+  geocoding: ^2.0.0
+  geocoder: ^0.2.1
 
 
   # The following adds the Cupertino Icons font to your application.
