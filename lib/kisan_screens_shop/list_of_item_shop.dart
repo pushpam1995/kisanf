@@ -7,6 +7,8 @@ import 'inputfieldpage.dart';
 
 /// This is the main application widget.
 class MyApplist extends StatefulWidget {
+  String AppBarName;
+  MyApplist({required this.AppBarName});
   @override
   MyAppState createState() => MyAppState();
 }
@@ -53,7 +55,7 @@ class MyAppState extends State<MyApplist> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Shop Item"),
+        title: Text(widget.AppBarName),
         centerTitle: true,
       ),
       body: ListView.builder(

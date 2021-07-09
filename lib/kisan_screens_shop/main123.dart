@@ -20,11 +20,13 @@ class FarmerShop extends StatelessWidget {
 }
 
 class ShopItemDesign extends StatelessWidget {
+
+
   void _shopItem(context) {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
-          return MyApplist();
+          return MyApplist(AppBarName:"Shop Item");
         },
       ),
     );

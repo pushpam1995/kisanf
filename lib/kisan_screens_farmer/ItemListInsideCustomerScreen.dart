@@ -4,11 +4,14 @@ import 'HorizontalItemScroll.dart';
 import 'ItemModel.dart';
 import 'listitem/list_of_item.dart';
 
-class ItemListInsideCustomerScreen extends StatelessWidget {
+class ItemListInsidePurchase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ItemListInsideCustomerScreenDesign(),
+    return Scaffold(
+      appBar: AppBar(
+
+      ),
+      body: ItemListInsideCustomerScreenDesign(),
     );
   }
 }
@@ -16,16 +19,7 @@ class ItemListInsideCustomerScreen extends StatelessWidget {
 class ItemListInsideCustomerScreenDesign extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.shopping_cart),
-          onPressed: () {},
-        ),
-        title: Text("Buy Item"),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         child: Column(
           children: [
             Container(
@@ -78,8 +72,8 @@ class ItemListInsideCustomerScreenDesign extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
+      );
+
   }
 
   List wonders = [
