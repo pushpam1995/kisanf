@@ -7,7 +7,7 @@ Future<RegistrationModel> registerUser(String phoneNumber, String deviceId,
     String name, String email, String usertype) async {
   final response = await http.post(
     Uri.parse(
-        'http://kisandosth-elb-1255426508.ap-south-1.elb.amazonaws.com/user'),
+        'http://www.kisandosth.com/user'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

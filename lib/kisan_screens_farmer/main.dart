@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:kisan_dost_app/getcategoryresponsecustomer/customerresponsemodel.dart';
+import 'package:kisan_dost_app/getcategoryresponsecustomer/customerresponseservice.dart';
+import 'package:kisan_dost_app/getcategoryresponsefarmer/farmercategoryresponsemodel.dart';
+import 'package:kisan_dost_app/getcategoryresponsefarmer/farmercategoryresponseservices.dart';
+import 'package:kisan_dost_app/getcategoryresponseshop/shopcategorymodel.dart';
+import 'package:kisan_dost_app/getcategoryresponseshop/shopcategoryservices.dart';
 import 'package:kisan_dost_app/kisan_screens_farmer/userprofile.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/list_of_item_shop.dart';
 
@@ -25,8 +31,36 @@ class FarmerScreenDesign extends StatefulWidget {
 class _FarmerScreenDesignState extends State<FarmerScreenDesign> {
 int purchaseButton=0;
 int saleButton=0;
+int shopButton=0;
 Color color1 = Colors.pink;
 Color color2 = Colors.grey;
+Color color3 = Colors.grey;
+Future<FarmerCategoryResponseModel>? _futureAlbum;
+Future<CustomerCategoryModel>? _futureAlbumCustomer;
+Future<ShopCategoryModel>? _futureAlbumShop;
+void farmerCategoryLoding() {
+  setState(() {
+    _futureAlbum = fetchfarmercategory();
+  });
+}
+void customerCategoryLoding() {
+  setState(() {
+    _futureAlbumCustomer = fetchcustomercategory();
+  });
+}
+void shopCategoryLoding() {
+  setState(() {
+    _futureAlbumShop = fetchShopCategory();
+  });
+}
+@override
+void initState() {
+  // TODO: implement initState
+  super.initState();
+  farmerCategoryLoding();
+  customerCategoryLoding();
+  shopCategoryLoding();
+}
 
  void purchaseIitemList(){
    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
@@ -102,17 +136,20 @@ void saleItemList(context) {
                 height: height * 0.1,
                 child: Row(
                   //crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MaterialButton(minWidth: MediaQuery.of(context).size.width*0.4,
+                    MaterialButton(
                       color: color1,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20.0))),
                       onPressed: () {
                       setState(() {
+                        saleButton=1;
+                        shopButton=1;
                         purchaseButton=0;
                         color1=Colors.pink;
                         color2=Colors.grey;
+                        color3=Colors.grey;
                       });
                       },
                       child: Text(
@@ -123,19 +160,44 @@ void saleItemList(context) {
                     SizedBox(
                       width: 30,
                     ),
-                    MaterialButton(minWidth: MediaQuery.of(context).size.width*0.4,
-                      color: color2,
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0,0,20,0),
+                      child: MaterialButton(
+                        color: color2,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(20.0))),
+                        onPressed: () {
+                          setState(() {
+                            shopButton=1;
+                            saleButton=0;
+                            purchaseButton=1;
+                            color1=Colors.grey;
+                            color2=Colors.pink;
+                            color3=Colors.grey;
+                          });
+                        },
+                        child: Text(
+                          "Sale",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    MaterialButton(
+                      color: color3,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20.0))),
                       onPressed: () {
                         setState(() {
+                          shopButton=0;
+                          saleButton=1;
                           purchaseButton=1;
                           color1=Colors.grey;
-                          color2=Colors.pink;
+                          color2=Colors.grey;
+                          color3=Colors.pink;
                         });
                       },
                       child: Text(
-                        "Sale",
+                        "Shop",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -144,38 +206,13 @@ void saleItemList(context) {
               ),
               (purchaseButton==0)?Container(
                 height: height * 0.49,
-                child: ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: purchaseIitemList,
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        child: Center(
-                          child: Text(
-                            'Purchase Item Button $index',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15),
-                          ),
-                        ),
-                        height: 45.0,
-                        width: MediaQuery.of(context).size.width - 100.0,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(13),
-                            color: Colors.blue,
-                            image: DecorationImage(
-                                image: new NetworkImage(
-                                    "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/MDA2018_inline_03.jpg"),
-                                fit: BoxFit.fill)),
-                      ),
-                    );
-                  },
-                ),
-              ):Container(
+                child: buildFutureBuilder(context),
+              ):(saleButton==0)?Container(
                 height: height * 0.49,
-                child: ListView.builder(
+                child: buildFutureBuilderCustomer(context),
+              ):(shopButton==0)?Container(
+                height: height * 0.49,
+                child:buildFutureBuilderShop(context), /*ListView.builder(
                   itemCount: 5,
                   itemBuilder: (contextr, index) {
                     return GestureDetector(
@@ -184,7 +221,7 @@ void saleItemList(context) {
                         margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
                         child: Center(
                           child: Text(
-                            'Sale Item Button $index',
+                            'Shop Item Button $index',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold,
@@ -203,8 +240,8 @@ void saleItemList(context) {
                       ),
                     );
                   },
-                ),
-              ),
+                ),*/
+              ):Container(child: Center(child: Text("some proble in button logic..."),),)
             ],
           ),
         ),
@@ -253,6 +290,135 @@ void saleItemList(context) {
       }));
     }
   }
+
+FutureBuilder<FarmerCategoryResponseModel> buildFutureBuilder(contextw) {
+  return FutureBuilder<FarmerCategoryResponseModel>(
+    future: _futureAlbum,
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+
+        return ListView.builder(
+          itemCount: snapshot.data!.payload.length,
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onTap: purchaseIitemList,
+              child: Container(
+                margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                child: Center(
+                  child: Text(
+                   snapshot.data!.payload.elementAt(index).name,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15),
+                  ),
+                ),
+                height: 45.0,
+                width: MediaQuery.of(context).size.width - 100.0,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(13),
+                    color: Colors.blue,
+                    image: DecorationImage(
+                        image: new NetworkImage(
+                            "put your image here"),
+                        fit: BoxFit.fill)),
+              ),
+            );
+          },
+        );
+      } else if (snapshot.hasError) {
+        return Center(child: Text('${snapshot.error}'));
+      }
+
+      return Center(child: CircularProgressIndicator());
+    },
+  );
+}
+
+FutureBuilder<CustomerCategoryModel> buildFutureBuilderCustomer(contextw) {
+  return FutureBuilder<CustomerCategoryModel>(
+    future: _futureAlbumCustomer,
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+
+        return ListView.builder(
+                  itemCount: snapshot.data!.payload.length,
+                  itemBuilder: (contextr, index) {
+                    return GestureDetector(
+                      onTap:()=> saleItemList(context),
+                      child: Container(
+                        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                        child: Center(
+                          child: Text(
+                           snapshot.data!.payload.elementAt(index).name,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15),
+                          ),
+                        ),
+                        height: 45.0,
+                        width: MediaQuery.of(context).size.width - 100.0,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(13),
+                            color: Colors.blue,
+                            image: DecorationImage(
+                                image: new NetworkImage(
+                                    "put your image link here"),
+                                fit: BoxFit.fill)),
+                      ),
+                    );
+                  },
+                );
+      } else if (snapshot.hasError) {
+        return Center(child: Text('${snapshot.error}'));
+      }
+
+      return Center(child: CircularProgressIndicator());
+    },
+  );
+}
+
+FutureBuilder<ShopCategoryModel> buildFutureBuilderShop(contextw) {
+  return FutureBuilder<ShopCategoryModel>(
+    future: _futureAlbumShop,
+    builder: (context, snapshot) {
+      if (snapshot.hasData) {
+
+        return ListView.builder(
+          itemCount: snapshot.data!.payload.length,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+              child: Center(
+                child: Text(
+                  snapshot.data!.payload.elementAt(index).name,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15),
+                ),
+              ),
+              height: 45.0,
+              width: MediaQuery.of(context).size.width - 100.0,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(13),
+                  color: Colors.blue,
+                  image: DecorationImage(
+                      image: new NetworkImage(
+                          "put your image link"),
+                      fit: BoxFit.fill)),
+            );
+          },
+        );
+      } else if (snapshot.hasError) {
+        return Center(child: Text('${snapshot.error}'));
+      }
+
+      return Center(child: CircularProgressIndicator());
+    },
+  );
+}
 
 
   int _selectedIndex = 0;

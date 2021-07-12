@@ -1,19 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:kisan_dost_app/kisan_screens_farmer/listitem/transaction.dart';
+import 'package:kisan_dost_app/kisan_screens_shop/drop_down.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/popup_fragment.dart';
+import 'package:kisan_dost_app/postshopitemandgettheresponse/postshopitemmodel.dart';
+import 'package:kisan_dost_app/postshopitemandgettheresponse/postshopitemservice.dart';
 
+import 'additempopup.dart';
 import 'coustom_ltem_item.dart';
 import 'inputfieldpage.dart';
+import 'list_category.dart';
 
 /// This is the main application widget.
 class MyApplist extends StatefulWidget {
   String AppBarName;
+
   MyApplist({required this.AppBarName});
+
   @override
   MyAppState createState() => MyAppState();
 }
 
 class MyAppState extends State<MyApplist> {
+  TextEditingController textEditingControllerName = new TextEditingController();
+  TextEditingController textEditingControllerDescription =
+      new TextEditingController();
+  TextEditingController textEditingControllerShopId =
+      new TextEditingController();
+  TextEditingController textEditingControllerPrice =
+      new TextEditingController();
+  TextEditingController textEditingControllerQuantity =
+      new TextEditingController();
+  late String name;
+  late String descripton;
+  late String shopId;
+  late String price;
+  late String quantity;
+  String dropdownValue = 'Category one';
+  final _formKey = GlobalKey();
+
+
   List<Transaction> transaction = [
     Transaction(category: 'Rice', price: 999000, title: "The Food"),
     Transaction(category: 'Rice', price: 999000, title: "The Food"),
@@ -28,6 +53,13 @@ class MyAppState extends State<MyApplist> {
       transaction.add(trns);
     });
   }
+  String a = "Choose Category";
+  void changeCat(value) {
+    setState(() {
+      a = value;
+    });
+  }
+
 
   void handleClick(value, index) {
     if (value == "Edit")
@@ -50,6 +82,8 @@ class MyAppState extends State<MyApplist> {
   void categorySelect(value) {
     setState(() {});
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -79,30 +113,6 @@ class MyAppState extends State<MyApplist> {
         },
         itemCount: transaction.length,
       ),
-
-      /*ListView(
-        padding: const EdgeInsets.all(8.0),
-        itemExtent: 170.0,
-        children: <CustomListItem>[
-          CustomListItem(
-            category: 'Flutter',
-            price: 999000,
-            thumbnail: Container(
-              decoration: const BoxDecoration(color: Colors.blue),
-            ),
-            title: 'The Flutter',
-          ),
-          CustomListItem(
-            category: 'Dash',
-            price: 884000,
-            thumbnail: Container(
-              decoration: const BoxDecoration(color: Colors.yellow),
-            ),
-            title: 'Announcing',
-          ),
-        ],
-      ),*/
-
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
         // splashColor: Colors.purple,
@@ -114,7 +124,111 @@ class MyAppState extends State<MyApplist> {
           // color: Colors.white,
         ),
         onPressed: () {
-          showModalBottomSheet(
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return CustomDialogBoxForAddingItem(
+                  title: "Add Item Details",
+                  descriptions: "This item will be Reflect on your item List",
+                  text: "Add Item",
+                );
+              });
+         /* showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  content: Stack(
+                   // overflow: Overflow.visible,
+                    children: <Widget>[
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                    hintText: "Name of an item"),
+                                controller: textEditingControllerName,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                    hintText: "description of an item"),
+                                controller: textEditingControllerDescription,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                decoration:
+                                    InputDecoration(hintText: "Shop id"),
+                                controller: textEditingControllerShopId,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                decoration:
+                                    InputDecoration(hintText: "price per kg"),
+                                controller: textEditingControllerPrice,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                decoration: InputDecoration(
+                                    hintText: "Quantity Available"),
+                                controller: textEditingControllerQuantity,
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child:DropdownButton<String>(
+                                items: Category().cato.map((String value) {
+                                  return new DropdownMenuItem<String>(
+                                    value: value,
+                                    child: new Text(value),
+                                  );
+                                }).toList(),
+                                hint: Text(
+                                  a,
+                                  style: TextStyle(color: Theme.of(context).accentColor),
+                                ),
+                                onChanged: (value) => changeCat(value),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: RaisedButton(
+                                child: Text("Submitß"),
+                                onPressed: () {
+                                 name=textEditingControllerName.text;
+                                 descripton=textEditingControllerDescription.text;
+                                 shopId=textEditingControllerShopId.text;
+                                 price=textEditingControllerPrice.text;
+                                 quantity=textEditingControllerQuantity.text;
+                                 int? va=Category().mapcategorytonum[a];
+
+
+
+                                 print("$name, $descripton, $shopId, $price, $price, $quantity, $va");
+
+                                  Navigator.pop(context);
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              });*/
+          /*  showModalBottomSheet(
             context: context,
             builder: (_) {
               return SingleChildScrollView(
@@ -125,9 +239,13 @@ class MyAppState extends State<MyApplist> {
                 ),
               );
             },
-          );
+          );*/
         },
       ),
     );
   }
+
+
+
+
 }

@@ -9,8 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kisan_dost_app/getotpresponse/getotpresponsemodel.dart';
 import 'package:kisan_dost_app/getotpresponse/getotpresponseservice.dart';
+import 'package:kisan_dost_app/kisan_screens_customer/main.dart';
 import 'package:kisan_dost_app/kisan_screens_farmer/main.dart';
 import 'package:kisan_dost_app/kisan_screens_farmer/userprofile.dart';
+import 'package:kisan_dost_app/kisan_screens_shop/main123.dart';
 
 import 'otp_dialog_screen.dart';
 
@@ -54,8 +56,12 @@ class _OtpVerifyState extends State<OtpVerify> {
 
   var otpGenerationResponse;
  void func(){
+  /* Navigator.push(
+       context, MaterialPageRoute(builder: (context) => CustomerScreen()));*/
+  /* Navigator.push(
+       context, MaterialPageRoute(builder: (context) => FarmerScreen()));*/
    Navigator.push(
-       context, MaterialPageRoute(builder: (context) => FarmerScreen()));
+       context, MaterialPageRoute(builder: (context) => FarmerShop()));
   /* setState(() {
      i=0;
 _futureAlbum=null;

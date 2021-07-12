@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'list_category.dart';
 
 class DropDown extends StatefulWidget {
+  final Function setcategoryaddress;
+  DropDown({required this.setcategoryaddress});
   @override
   _DropDownState createState() => _DropDownState();
 }
@@ -12,6 +14,7 @@ class _DropDownState extends State<DropDown> {
   void changeCat(value) {
     setState(() {
       a = value;
+      widget.setcategoryaddress(a);
     });
   }
 

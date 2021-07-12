@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:kisan_dost_app/getcategoryresponsecustomer/customerresponsemodel.dart';
+import 'package:kisan_dost_app/getcategoryresponsecustomer/customerresponseservice.dart';
 
 import 'ItemListInsideCustomerScreen.dart';
 import 'checkoutScreenforbuyallitem.dart';
@@ -20,6 +22,18 @@ class CustomerScreenDesign extends StatefulWidget {
 }
 
 class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
+  Future<CustomerCategoryModel>? _futureAlbum;
+  void customerCategoryLoding() {
+    setState(() {
+      _futureAlbum = fetchcustomercategory();
+    });
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    customerCategoryLoding();
+  }
   @override
   Widget build(BuildContext context) {
     PreferredSizeWidget appBar = AppBar(
@@ -87,35 +101,10 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
                 ],
               ),
             ),
-            Container(
+            (_futureAlbum != null)? Container(
               height: height * 0.45,
-              child: ListView.builder(
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                    child: Center(
-                      child: Text(
-                        'Item Button',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15),
-                      ),
-                    ),
-                    height: 45.0,
-                    width: MediaQuery.of(context).size.width - 100.0,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(13),
-                        color: Colors.blue,
-                        image: DecorationImage(
-                            image: new NetworkImage(
-                                "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/MDA2018_inline_03.jpg"),
-                            fit: BoxFit.fill)),
-                  );
-                },
-              ),
-            ),
+              child: buildFutureBuilder(context),
+            ):Container(),
           ],
         ),
       ),
@@ -152,6 +141,46 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
       });
     }
 
+  }
+  FutureBuilder<CustomerCategoryModel> buildFutureBuilder(contextw) {
+    return FutureBuilder<CustomerCategoryModel>(
+      future: _futureAlbum,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+
+          return ListView.builder(
+            itemCount: snapshot.data!.payload.length,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                child: Center(
+                  child: Text(
+                   snapshot.data!.payload.elementAt(index).name,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15),
+                  ),
+                ),
+                height: 45.0,
+                width: MediaQuery.of(context).size.width - 100.0,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(13),
+                    color: Colors.blue,
+                    image: DecorationImage(
+                        image: new NetworkImage(
+                            "put your image link"),
+                        fit: BoxFit.fill)),
+              );
+            },
+          );
+               } else if (snapshot.hasError) {
+           return Center(child: Text('${snapshot.error}'));
+        }
+
+        return Center(child: CircularProgressIndicator());
+      },
+    );
   }
 
   int _selectedIndex = 0;

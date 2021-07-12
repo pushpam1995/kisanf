@@ -6,7 +6,7 @@ import 'otpveryfymodel.dart';
 
 Future<OtpVerify> verifyOtp(String otp,String phoneNo) async {
   final response = await http.post(
-    Uri.parse('http://kisandosth-elb-1255426508.ap-south-1.elb.amazonaws.com/user/otp/verify'),
+    Uri.parse('http://www.kisandosth.com/user/otp/verify'),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },

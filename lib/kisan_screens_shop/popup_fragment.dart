@@ -28,6 +28,9 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
       child: contentBox(context),
     );
   }
+  void noUseFunction(value){
+
+  }
 
   contentBox(context) {
     return SingleChildScrollView(
@@ -88,7 +91,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                 SizedBox(
                   height: 15,
                 ),
-                DropDown(),
+                DropDown(setcategoryaddress: noUseFunction,),
                 SizedBox(
                   height: 15,
                 ),
