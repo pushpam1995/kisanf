@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:kisan_dost_app/getcategoryitem/getcategoryitemservice.dart';
+import 'package:kisan_dost_app/getcategoryresponsefarmer/farmercategoryresponseservices.dart';
 import 'package:kisan_dost_app/kisan_screens_farmer/listitem/transaction.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'coustom_ltem_item.dart';
 
 /// This is the main application widget.
 class MyApp extends StatefulWidget {
+
   @override
   MyAppState createState() => MyAppState();
 }
 
 class MyAppState extends State<MyApp> {
-  List<Transaction> transaction = [
-    Transaction(category: 'Fruits', price: 500, title: "java plum"),
-    Transaction(category: 'Vegetables', price: 200, title: "Cauliflower."),
-    Transaction(category: 'Nuts', price: 1500, title: "TPistachios"),
-    Transaction(category: 'Nuts', price: 2000, title: "Marcona Almonds."),
-    Transaction(category: 'Vegetables', price: 100, title: "green pepper"),
-    Transaction(category: 'Fruits', price: 600, title: "Indian gooseberry"),
-  ];
+
+int cat=0;
+  List<Transaction> transaction = [];
+
 
   addNewItem(Transaction trns) {
     setState(() {
@@ -28,6 +28,35 @@ class MyAppState extends State<MyApp> {
   void categorySelect(value) {
     setState(() {});
   }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final information = SharedPreferences.getInstance();
+    information.then((value){
+
+        cat= value.getInt("purchasecategorybuttonindex");
+
+
+    });
+    fetchfarmercategory().then((value) {
+      value.payload.forEach((element) {
+      //  Transaction(category: element.categoryId.toString(),title: element.name,price:500);
+
+
+        if(cat!=0 && element.categoryId==cat) {
+          setState(() {
+            transaction.add(Transaction(category: element.categoryId.toString(),
+                title: element.name,
+                price: 500));
+          });
+        }
+
+      });
+
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {

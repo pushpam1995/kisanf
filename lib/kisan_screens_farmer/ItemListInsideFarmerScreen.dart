@@ -5,18 +5,22 @@ import 'ItemModel.dart';
 import 'listitem/list_of_item.dart';
 
 class ItemListInsidePurchase extends StatelessWidget {
+
+  ItemListInsidePurchase();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
 
       ),
-      body: ItemListInsideCustomerScreenDesign(),
+      body: ItemListInsideFarmerScreenDesign(),
     );
   }
 }
 
-class ItemListInsideCustomerScreenDesign extends StatelessWidget {
+class ItemListInsideFarmerScreenDesign extends StatelessWidget {
+
+  ItemListInsideFarmerScreenDesign();
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(

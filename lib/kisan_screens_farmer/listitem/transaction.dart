@@ -7,4 +7,6 @@ class Transaction {
 
   Transaction(
       {required this.title, required this.category, required this.price});
+
+
 }

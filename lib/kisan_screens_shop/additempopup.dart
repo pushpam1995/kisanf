@@ -200,9 +200,18 @@ class _CustomDialogBoxState extends State<CustomDialogBoxForAddingItem> {
       builder: (context, snapshot) {
         print("${snapshot.data}");
         if (snapshot.hasData) {
-          print("inside  if (snapshot.hasData)");
+        /*  WidgetsBinding.instance!.addPostFrameCallback((_) {
+            setState(() {
+              _futureAlbum = null;
+            });
+          });*/
+          textEditingControllerQuantity.clear();
+          textEditingControllerPrice.clear();
+          textEditingControllerShopId.clear();
+          textEditingControllerDescription.clear();
+          textEditingControllerName.clear();
           return Text("item added successfully");
-         // Navigator.pop(contextw);
+          //Navigator.pop(contextw);
         } else if (snapshot.hasError) {
           print("inside  else if (snapshot.hasError)");
            return Text('${snapshot.error}');
@@ -211,6 +220,9 @@ class _CustomDialogBoxState extends State<CustomDialogBoxForAddingItem> {
         return CircularProgressIndicator();
       },
     );
+    setState(() {
+      _futureAlbum=null;
+    });
   }
 
 }

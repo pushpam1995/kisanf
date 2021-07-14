@@ -1,27 +1,24 @@
+import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:kisan_dost_app/getcategoryresponseshop/shopcategorymodel.dart';
+import 'package:kisan_dost_app/getcategoryresponseshop/shopcategoryservices.dart';
+import 'package:kisan_dost_app/kisan_screens_farmer/myCartDesign.dart';
+import 'package:kisan_dost_app/kisan_screens_farmer/myorderdesign.dart';
+import 'package:kisan_dost_app/kisan_screens_farmer/userprofile.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/list_of_item_shop.dart';
 
 import 'data_model_filling_file.dart';
 import 'imageload.dart';
 import 'navigation_drawer.dart';
 
-class FarmerShop extends StatelessWidget {
+class FarmerShop extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-        accentColor: Colors.lightGreenAccent,
-      ),
-      home: ShopItemDesign(),
-    );
-  }
+  _FarmerShopState createState() => _FarmerShopState();
 }
 
-class ShopItemDesign extends StatelessWidget {
-
-
+class _FarmerShopState extends State<FarmerShop> {
+  int _selectedIndex = 0;
+  Future<ShopCategoryModel>? _futureAlbumShop;
   void _shopItem(context) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -32,91 +29,167 @@ class ShopItemDesign extends StatelessWidget {
     );
   }
 
+
+  void shopCategoryLoding() {
+    setState(() {
+      _futureAlbumShop = fetchShopCategory();
+    });
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    shopCategoryLoding();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Drawer(
-        child: NavegationDrawerItem(),
+    PreferredSizeWidget appBar = AppBar(
+      title: Text("Shop Home"),
+      leading: IconButton(
+        icon: Icon(Icons.menu),
+        onPressed: () {},
       ),
-      appBar: AppBar(
-        centerTitle: true,
-        //leading: Icon(Icons.menu),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Icon(Icons.shopping_cart),
+      centerTitle: true,
+      actions: [
+        IconButton(
+          onPressed: () {
+
+          },
+          icon: Icon(Icons.logout),
+        ),
+      ],
+    );
+    double height = (MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top-MediaQuery.of(context).padding.bottom);
+    return MaterialApp(home:
+    Scaffold(
+      appBar: appBar,
+      body: Container(
+        padding: EdgeInsets.all(10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: height * 0.3,
+              child: SizedBox(
+                  height: height * 0.3,
+                  width: double.infinity,
+                  child: Carousel(
+                    images: [
+                      NetworkImage(
+                          'https://cdn-images-1.medium.com/max/2000/1*GqdzzfB_BHorv7V2NV7Jgg.jpeg'),
+                      NetworkImage(
+                          'https://cdn-images-1.medium.com/max/2000/1*wnIEgP1gNMrK5gZU7QS0-A.jpeg'),
+                      // ExactAssetImage("assets/images/LaunchImage.jpg")
+                    ],
+                    dotSize: 4.0,
+                    dotSpacing: 15.0,
+                    dotColor: Colors.lightGreenAccent,
+                    indicatorBgPadding: 5.0,
+                    dotBgColor: Colors.purple.withOpacity(0.5),
+                    borderRadius: true,
+                    moveIndicatorFromBottom: 180.0,
+                    noRadiusForIndicator: true,
+                  )),
+            ),
+           Container(
+              height: height * 0.59,
+              child: buildFutureBuilderShop(context),
+            ),
+
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_basket),
+            label: 'My Orders',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.account_box_rounded),
+            label: 'My Account',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.shopping_cart_outlined),
+            label: 'My Cart',
           ),
         ],
-        title: Text("Farmer Connect.."),
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
       ),
-      body: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraint) {
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Center(
-                        child: Text(
-                          DataModeFillingFile().shopName,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20),
-                        ),
-                      ),
-                    ),
-                    Icon(Icons.attach_money_outlined),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
-                      child: Text(
-                        DataModeFillingFile().amountAvailable.toString(),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                // color: Colors.green,
-                // padding:EdgeInsets.all(10) ,
-                height: constraint.maxHeight * 0.3,
-                width: constraint.maxHeight,
-                margin: EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                    /* border: Border.all(
-                     // color: Colors.red[500],
-                    ),*/
-                    borderRadius: BorderRadius.all(Radius.circular(30))),
-
-                child: StackWidetSample(
-                    constraint.maxHeight * 0.3, constraint.maxHeight),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  ElevatedButton(
-                    onPressed: () => _shopItem(context),
-                    child: Text(
-                      '      Shop Item      ',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Respond to button press
-                    },
-                    child: Text(
-                      '     Shop Order     ',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  )
-                ],
-              ),
-            ],
-          );
-        },
-      ),
+    ),
     );
   }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    if(index==0){
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+        return MyOrder();
+      }));
+    }
+
+    if(index==1){
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+        return ProfileUI2();
+      }));
+    }
+    if(index==2){
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+        return MyCartPage();
+      }));
+    }
+  }
+  FutureBuilder<ShopCategoryModel> buildFutureBuilderShop(contextw) {
+    return FutureBuilder<ShopCategoryModel>(
+      future: _futureAlbumShop,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+
+          return ListView.builder(
+            itemCount: snapshot.data!.payload.length,
+            itemBuilder: (context, index) {
+              return GestureDetector(onTap:() =>_shopItem(context),
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: Center(
+                    child: Text(
+                      snapshot.data!.payload.elementAt(index).name,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15),
+                    ),
+                  ),
+                  height: 45.0,
+                  width: MediaQuery.of(context).size.width - 100.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(13),
+                      color: Colors.blue,
+                      image: DecorationImage(
+                          image: new NetworkImage(
+                              "put your image link"),
+                          fit: BoxFit.fill)),
+                ),
+              );
+            },
+          );
+        } else if (snapshot.hasError) {
+          return Center(child: Text('${snapshot.error}'));
+        }
+
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
 }
+

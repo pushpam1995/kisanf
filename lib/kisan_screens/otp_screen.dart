@@ -58,11 +58,11 @@ class _OtpVerifyState extends State<OtpVerify> {
  void func(){
   /* Navigator.push(
        context, MaterialPageRoute(builder: (context) => CustomerScreen()));*/
-  /* Navigator.push(
+   /*Navigator.push(
        context, MaterialPageRoute(builder: (context) => FarmerScreen()));*/
    Navigator.push(
        context, MaterialPageRoute(builder: (context) => FarmerShop()));
-  /* setState(() {
+   /*setState(() {
      i=0;
 _futureAlbum=null;
      _futureAlbum = createOtp(phnumberController.text,deviceId);
@@ -185,8 +185,6 @@ _futureAlbum=null;
                 elevation: 7.0,
                 color: Colors.lightGreen,
                 onPressed:func,):i==0?buildFutureBuilder(context):Container(),
-
-
           ],
         ),
       ),

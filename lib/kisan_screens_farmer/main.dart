@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:kisan_dost_app/Model/storepayload.dart';
 import 'package:kisan_dost_app/getcategoryresponsecustomer/customerresponsemodel.dart';
 import 'package:kisan_dost_app/getcategoryresponsecustomer/customerresponseservice.dart';
 import 'package:kisan_dost_app/getcategoryresponsefarmer/farmercategoryresponsemodel.dart';
@@ -8,8 +9,10 @@ import 'package:kisan_dost_app/getcategoryresponseshop/shopcategorymodel.dart';
 import 'package:kisan_dost_app/getcategoryresponseshop/shopcategoryservices.dart';
 import 'package:kisan_dost_app/kisan_screens_farmer/userprofile.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/list_of_item_shop.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import 'ItemListInsideCustomerScreen.dart';
+import 'ItemListInsideFarmerScreen.dart';
+import 'listitem/transaction.dart';
 import 'myCartDesign.dart';
 import 'myorderdesign.dart';
 
@@ -29,6 +32,7 @@ class FarmerScreenDesign extends StatefulWidget {
 }
 
 class _FarmerScreenDesignState extends State<FarmerScreenDesign> {
+
 int purchaseButton=0;
 int saleButton=0;
 int shopButton=0;
@@ -48,6 +52,7 @@ void customerCategoryLoding() {
     _futureAlbumCustomer = fetchcustomercategory();
   });
 }
+
 void shopCategoryLoding() {
   setState(() {
     _futureAlbumShop = fetchShopCategory();
@@ -62,8 +67,13 @@ void initState() {
   shopCategoryLoding();
 }
 
- void purchaseIitemList(){
+ void purchaseIitemList(index){
+   final information = SharedPreferences.getInstance();
+   information.then((value){
+     value.setInt("purchasecategorybuttonindex", index);
+   });
    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+
      return ItemListInsidePurchase();
    }));
   }
@@ -210,38 +220,10 @@ void saleItemList(context) {
               ):(saleButton==0)?Container(
                 height: height * 0.49,
                 child: buildFutureBuilderCustomer(context),
-              ):(shopButton==0)?Container(
+              ):/*(shopButton==0)?Container(
                 height: height * 0.49,
-                child:buildFutureBuilderShop(context), /*ListView.builder(
-                  itemCount: 5,
-                  itemBuilder: (contextr, index) {
-                    return GestureDetector(
-                      onTap:()=> saleItemList(context),
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                        child: Center(
-                          child: Text(
-                            'Shop Item Button $index',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 15),
-                          ),
-                        ),
-                        height: 45.0,
-                        width: MediaQuery.of(context).size.width - 100.0,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(13),
-                            color: Colors.blue,
-                            image: DecorationImage(
-                                image: new NetworkImage(
-                                    "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/MDA2018_inline_03.jpg"),
-                                fit: BoxFit.fill)),
-                      ),
-                    );
-                  },
-                ),*/
-              ):Container(child: Center(child: Text("some proble in button logic..."),),)
+                child:buildFutureBuilderShop(context),*/
+              Container(child: Center(child: Text("some proble in button logic..."),),)
             ],
           ),
         ),
@@ -301,7 +283,7 @@ FutureBuilder<FarmerCategoryResponseModel> buildFutureBuilder(contextw) {
           itemCount: snapshot.data!.payload.length,
           itemBuilder: (context, index) {
             return GestureDetector(
-              onTap: purchaseIitemList,
+              onTap:()=> purchaseIitemList(snapshot.data!.payload.elementAt(index).categoryId),
               child: Container(
                 margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
                 child: Center(
@@ -379,7 +361,7 @@ FutureBuilder<CustomerCategoryModel> buildFutureBuilderCustomer(contextw) {
   );
 }
 
-FutureBuilder<ShopCategoryModel> buildFutureBuilderShop(contextw) {
+/*FutureBuilder<ShopCategoryModel> buildFutureBuilderShop(contextw) {
   return FutureBuilder<ShopCategoryModel>(
     future: _futureAlbumShop,
     builder: (context, snapshot) {
@@ -418,7 +400,7 @@ FutureBuilder<ShopCategoryModel> buildFutureBuilderShop(contextw) {
       return Center(child: CircularProgressIndicator());
     },
   );
-}
+}*/
 
 
   int _selectedIndex = 0;
