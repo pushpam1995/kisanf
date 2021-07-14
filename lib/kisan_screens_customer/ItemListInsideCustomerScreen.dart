@@ -7,9 +7,8 @@ import 'listitem/list_of_item.dart';
 class ItemListInsideCustomerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: ItemListInsideCustomerScreenDesign(),
-    );
+    return ItemListInsideCustomerScreenDesign();
+
   }
 }
 

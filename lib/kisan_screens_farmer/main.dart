@@ -19,10 +19,8 @@ import 'myorderdesign.dart';
 class FarmerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: FarmerScreenDesign(),
-    );
+    return FarmerScreenDesign();
+
   }
 }
 
@@ -91,18 +89,18 @@ void saleItemList(context) {
   @override
   Widget build(BuildContext context) {
     PreferredSizeWidget appBar = AppBar(
-      title: Text("Customer Page..."),
-      leading: IconButton(
+      title: Text("Farmer Home"),
+   /*   leading: IconButton(
         icon: Icon(Icons.menu),
         onPressed: () {},
-      ),
+      ),*/
       centerTitle: true,
       actions: [
         IconButton(
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+           /* Navigator.of(context).push(MaterialPageRoute(builder: (_) {
               return ItemListInsidePurchase();
-            }));
+            }));*/
           },
           icon: Icon(Icons.logout),
         ),
@@ -111,7 +109,7 @@ void saleItemList(context) {
     double height = (MediaQuery.of(context).size.height -
         appBar.preferredSize.height -
         MediaQuery.of(context).padding.top);
-    return MaterialApp(home:
+    return
        Scaffold(
         appBar: appBar,
         body: Container(
@@ -124,13 +122,17 @@ void saleItemList(context) {
                 child: SizedBox(
                     height: height * 0.3,
                     width: double.infinity,
-                    child: Carousel(
+                    child: Carousel(boxFit: BoxFit.fill,
                       images: [
-                        NetworkImage(
+                      /*  NetworkImage(
                             'https://cdn-images-1.medium.com/max/2000/1*GqdzzfB_BHorv7V2NV7Jgg.jpeg'),
                         NetworkImage(
-                            'https://cdn-images-1.medium.com/max/2000/1*wnIEgP1gNMrK5gZU7QS0-A.jpeg'),
+                            'https://cdn-images-1.medium.com/max/2000/1*wnIEgP1gNMrK5gZU7QS0-A.jpeg'),*/
                         // ExactAssetImage("assets/images/LaunchImage.jpg")
+                        ExactAssetImage("images/Kisanlogoname.png"),
+                        ExactAssetImage("images/Kisanlogo75.png"),
+                        // ExactAssetImage("images/mapp.png"),
+
                       ],
                       dotSize: 4.0,
                       dotSpacing: 15.0,
@@ -148,7 +150,7 @@ void saleItemList(context) {
                   //crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MaterialButton(
+                    MaterialButton(minWidth: MediaQuery.of(context).size.width*0.4,
                       color: color1,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20.0))),
@@ -170,44 +172,22 @@ void saleItemList(context) {
                     SizedBox(
                       width: 30,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0,0,20,0),
-                      child: MaterialButton(
-                        color: color2,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(20.0))),
-                        onPressed: () {
-                          setState(() {
-                            shopButton=1;
-                            saleButton=0;
-                            purchaseButton=1;
-                            color1=Colors.grey;
-                            color2=Colors.pink;
-                            color3=Colors.grey;
-                          });
-                        },
-                        child: Text(
-                          "Sale",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    MaterialButton(
-                      color: color3,
+                    MaterialButton(minWidth: MediaQuery.of(context).size.width*0.4,
+                      color: color2,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(20.0))),
                       onPressed: () {
                         setState(() {
-                          shopButton=0;
-                          saleButton=1;
+                          shopButton=1;
+                          saleButton=0;
                           purchaseButton=1;
                           color1=Colors.grey;
-                          color2=Colors.grey;
-                          color3=Colors.pink;
+                          color2=Colors.pink;
+                          color3=Colors.grey;
                         });
                       },
                       child: Text(
-                        "Shop",
+                        "Sale",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -246,8 +226,7 @@ void saleItemList(context) {
           selectedItemColor: Colors.amber[800],
           onTap: _onItemTapped,
         ),
-      ),
-    );
+      );
   }
 
   void _onItemTapped(int index) {
@@ -257,7 +236,7 @@ void saleItemList(context) {
 
     if(index==0){
       Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-        return MyOrder();
+        return MyCartPage();
       }));
     }
 

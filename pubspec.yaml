@@ -33,6 +33,12 @@ dependencies:
   geolocator: ^7.0.3
   geocoding: ^2.0.0
   geocoder: ^0.2.1
+  flutter_launcher_icons: "^0.8.0"
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "images/Kisanlogoname.png"
 
 
   # The following adds the Cupertino Icons font to your application.

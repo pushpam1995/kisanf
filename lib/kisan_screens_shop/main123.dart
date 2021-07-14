@@ -47,10 +47,10 @@ class _FarmerShopState extends State<FarmerShop> {
   Widget build(BuildContext context) {
     PreferredSizeWidget appBar = AppBar(
       title: Text("Shop Home"),
-      leading: IconButton(
+   /*   leading: IconButton(
         icon: Icon(Icons.menu),
         onPressed: () {},
-      ),
+      ),*/
       centerTitle: true,
       actions: [
         IconButton(
@@ -64,7 +64,7 @@ class _FarmerShopState extends State<FarmerShop> {
     double height = (MediaQuery.of(context).size.height -
         appBar.preferredSize.height -
         MediaQuery.of(context).padding.top-MediaQuery.of(context).padding.bottom);
-    return MaterialApp(home:
+    return
     Scaffold(
       appBar: appBar,
       body: Container(
@@ -77,13 +77,17 @@ class _FarmerShopState extends State<FarmerShop> {
               child: SizedBox(
                   height: height * 0.3,
                   width: double.infinity,
-                  child: Carousel(
+                  child: Carousel(boxFit: BoxFit.fill,
                     images: [
-                      NetworkImage(
+                   /*   NetworkImage(
                           'https://cdn-images-1.medium.com/max/2000/1*GqdzzfB_BHorv7V2NV7Jgg.jpeg'),
                       NetworkImage(
-                          'https://cdn-images-1.medium.com/max/2000/1*wnIEgP1gNMrK5gZU7QS0-A.jpeg'),
+                          'https://cdn-images-1.medium.com/max/2000/1*wnIEgP1gNMrK5gZU7QS0-A.jpeg'),*/
                       // ExactAssetImage("assets/images/LaunchImage.jpg")
+                      ExactAssetImage("images/Kisanlogoname.png"),
+                      ExactAssetImage("images/Kisanlogo75.png"),
+                      // ExactAssetImage("images/mapp.png"),
+
                     ],
                     dotSize: 4.0,
                     dotSpacing: 15.0,
@@ -113,16 +117,16 @@ class _FarmerShopState extends State<FarmerShop> {
             icon: Icon(Icons.account_box_rounded),
             label: 'My Account',
           ),
-          BottomNavigationBarItem(
+        /*  BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart_outlined),
             label: 'My Cart',
-          ),
+          ),*/
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
       ),
-    ),
+
     );
   }
 
@@ -133,7 +137,7 @@ class _FarmerShopState extends State<FarmerShop> {
 
     if(index==0){
       Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-        return MyOrder();
+        return MyCartPage();
       }));
     }
 
@@ -142,11 +146,11 @@ class _FarmerShopState extends State<FarmerShop> {
         return ProfileUI2();
       }));
     }
-    if(index==2){
+   /* if(index==2){
       Navigator.of(context).push(MaterialPageRoute(builder: (_) {
         return MyCartPage();
       }));
-    }
+    }*/
   }
   FutureBuilder<ShopCategoryModel> buildFutureBuilderShop(contextw) {
     return FutureBuilder<ShopCategoryModel>(

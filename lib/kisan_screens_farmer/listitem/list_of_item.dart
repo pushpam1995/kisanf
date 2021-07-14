@@ -44,13 +44,13 @@ int cat=0;
       //  Transaction(category: element.categoryId.toString(),title: element.name,price:500);
 
 
-        if(cat!=0 && element.categoryId==cat) {
+       // if(cat!=0 && element.categoryId==cat) {
           setState(() {
             transaction.add(Transaction(category: element.categoryId.toString(),
                 title: element.name,
                 price: 500));
           });
-        }
+      //  }
 
       });
 

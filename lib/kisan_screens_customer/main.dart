@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:kisan_dost_app/getcategoryresponsecustomer/customerresponsemodel.dart';
 import 'package:kisan_dost_app/getcategoryresponsecustomer/customerresponseservice.dart';
+import 'package:kisan_dost_app/kisan_screens_farmer/userprofile.dart';
 
 import 'ItemListInsideCustomerScreen.dart';
 import 'checkoutScreenforbuyallitem.dart';
@@ -9,10 +10,8 @@ import 'checkoutScreenforbuyallitem.dart';
 class CustomerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: CustomerScreenDesign(),
-    );
+    return  CustomerScreenDesign();
+
   }
 }
 
@@ -28,6 +27,12 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
       _futureAlbum = fetchcustomercategory();
     });
   }
+ void customeritemforbuying(){
+   Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+     return ItemListInsideCustomerScreen();
+   }));
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -37,18 +42,16 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
   @override
   Widget build(BuildContext context) {
     PreferredSizeWidget appBar = AppBar(
-      title: Text("Customer Page..."),
-      leading: IconButton(
+      title: Text("Customer Home"),
+     /* leading: IconButton(
         icon: Icon(Icons.menu),
         onPressed: () {},
-      ),
+      ),*/
       centerTitle: true,
       actions: [
         IconButton(
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-              return ItemListInsideCustomerScreen();
-            }));
+
           },
           icon: Icon(Icons.shopping_cart_outlined),
         ),
@@ -69,13 +72,16 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
               child: SizedBox(
                   height: height * 0.3,
                   width: double.infinity,
-                  child: Carousel(
+                  child: Carousel(boxFit: BoxFit.fill,
                     images: [
-                      NetworkImage(
+                    /*  NetworkImage(
                           'https://cdn-images-1.medium.com/max/2000/1*GqdzzfB_BHorv7V2NV7Jgg.jpeg'),
                       NetworkImage(
-                          'https://cdn-images-1.medium.com/max/2000/1*wnIEgP1gNMrK5gZU7QS0-A.jpeg'),
-                      // ExactAssetImage("assets/images/LaunchImage.jpg")
+                          'https://ibb.co/Kqg4NW6'),*/
+                      ExactAssetImage("images/Kisanlogoname.png"),
+                       ExactAssetImage("images/Kisanlogo75.png"),
+                     // ExactAssetImage("images/mapp.png"),
+
                     ],
                     dotSize: 4.0,
                     dotSpacing: 15.0,
@@ -110,17 +116,17 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+         /* BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
-          ),
+          ),*/
           BottomNavigationBarItem(
             icon: Icon(Icons.account_box_rounded),
-            label: 'Account',
+            label: 'My Account',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_basket),
-            label: 'Cart',
+            label: 'My Cart',
           ),
         ],
         currentIndex: _selectedIndex,
@@ -131,7 +137,15 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
   }
 
   void _onItemTapped(int index) {
-    if(index==2){
+    if(index==0){
+      setState(() {
+        _selectedIndex = index;
+        Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+          return ProfileUI2();
+        }));
+      });
+    }
+    if(index==1){
       setState(() {
         _selectedIndex = index;
         Navigator.push(
@@ -151,26 +165,28 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
           return ListView.builder(
             itemCount: snapshot.data!.payload.length,
             itemBuilder: (context, index) {
-              return Container(
-                margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                child: Center(
-                  child: Text(
-                   snapshot.data!.payload.elementAt(index).name,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15),
+              return GestureDetector(onTap: customeritemforbuying,
+                child: Container(
+                  margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                  child: Center(
+                    child: Text(
+                     snapshot.data!.payload.elementAt(index).name,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15),
+                    ),
                   ),
+                  height: 45.0,
+                  width: MediaQuery.of(context).size.width - 100.0,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(13),
+                      color: Colors.blue,
+                      image: DecorationImage(
+                          image: new NetworkImage(
+                              "put your image link"),
+                          fit: BoxFit.fill)),
                 ),
-                height: 45.0,
-                width: MediaQuery.of(context).size.width - 100.0,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(13),
-                    color: Colors.blue,
-                    image: DecorationImage(
-                        image: new NetworkImage(
-                            "put your image link"),
-                        fit: BoxFit.fill)),
               );
             },
           );
