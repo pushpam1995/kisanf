@@ -226,7 +226,7 @@ class LunchState extends State<SignUpScreen> {
               value.setString("email", snapshot.data!.payload!.email);
               value.setString(
                   "phoneNumber", snapshot.data!.payload!.phoneNumber);
-              value.setString("userType", snapshot.data!.payload!.userType);
+              value.setString("userType",    snapshot.data!.payload!.userType);
               value.setInt("userId", snapshot.data!.payload!.userId);
             });
           }
