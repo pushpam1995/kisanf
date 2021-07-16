@@ -43,46 +43,50 @@ class _VideoDescriptionState extends State<VideoDescription> {
             widget.title,
             style: const TextStyle(
               fontWeight: FontWeight.w500,
-              fontSize: 22.0,
+              fontSize: 15.0,
             ),
           ),
-          const Padding(
-              padding: EdgeInsets.symmetric(
-            vertical: 5.0,
-          )),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
           Text(
             widget.category,
-            style: const TextStyle(fontSize: 15.0),
+            style: const TextStyle(fontSize: 12.0),
           ),
-          const Padding(padding: EdgeInsets.symmetric(vertical: 5.0)),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.02,
+          ),
           Text(
             '${widget.price} /kg',
-            style: const TextStyle(fontSize: 15.0),
+            style: const TextStyle(fontSize: 12.0),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 8, 8, 8),
             child: FittedBox(
               child: Row(
                 children: [
-                  Text("Order Quantity: "),
+                  Text(
+                    "Order Quantity: ",
+                    style: TextStyle(fontSize: 10.0),
+                  ),
                   TextButton(
                     onPressed: quantityAdd,
                     child: Text(
                       "+",
                       style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Text(
                     "${quan.toString()} kg",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                   ),
                   TextButton(
                     onPressed: quantitySub,
                     child: Text(
                       "-",
                       style:
-                          TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   //    Icon(Icons.minu)
@@ -94,7 +98,10 @@ class _VideoDescriptionState extends State<VideoDescription> {
               child: Text("Take/Upload Picture", style: TextStyle(color: Theme
                   .of(context)
                   .primaryColor, fontWeight: FontWeight.bold),),),*/
-          Text("Available Quantity: 15 kg "),
+          Text(
+            "Available Quantity: 15 kg ",
+            style: TextStyle(fontSize: 10.0),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -102,7 +109,8 @@ class _VideoDescriptionState extends State<VideoDescription> {
                   onPressed: () {},
                   child: Text(
                     "Buy Item",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 10.0),
                   ))
             ],
           )

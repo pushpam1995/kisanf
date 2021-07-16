@@ -20,8 +20,6 @@ class OtpVerify extends StatefulWidget {
   BuildContext con;
   OtpVerify(this.con);
 
-
-
   @override
   _OtpVerifyState createState() => _OtpVerifyState();
 }
@@ -31,12 +29,10 @@ class _OtpVerifyState extends State<OtpVerify> {
   TextEditingController phnumberController = TextEditingController();
   Future<GetOtpModel>? _futureAlbum;
   late String deviceId;
-  int i=0;
+  int i = 0;
   //String phnumber, phoneNumber;
   //OtpModel userDetails = new OtpModel();
   // UserService otpService = new UserService();
-
-
 
   Future<String> getId() async {
     // var deviceInfo = DeviceInfoPlugin();
@@ -55,18 +51,18 @@ class _OtpVerifyState extends State<OtpVerify> {
   }
 
   var otpGenerationResponse;
- void func(){
-  /* Navigator.push(
-       context, MaterialPageRoute(builder: (context) => CustomerScreen()));*/
- /*  Navigator.push(
+  void func() {
+    /*Navigator.push(
+        context, MaterialPageRoute(builder: (context) => CustomerScreen()));*/
+    /*  Navigator.push(
        context, MaterialPageRoute(builder: (context) => FarmerScreen()));*/
-  /* Navigator.push(
-       context, MaterialPageRoute(builder: (context) => FarmerShop()));*/
-   setState(() {
-     i=0;
-_futureAlbum=null;
-     _futureAlbum = createOtp(phnumberController.text,deviceId);
-   });
+    /*Navigator.push(
+        context, MaterialPageRoute(builder: (context) => FarmerShop()));*/
+    setState(() {
+      i = 0;
+      _futureAlbum = null;
+      _futureAlbum = createOtp(phnumberController.text, deviceId);
+    });
   }
 
   @override
@@ -74,7 +70,7 @@ _futureAlbum=null;
     // TODO: implement initState
     super.initState();
     getId();
-    i=0;
+    i = 0;
     print("initState");
   }
 
@@ -88,12 +84,10 @@ _futureAlbum=null;
     print("didChangeDependencies");
     setState(() {
       _futureAlbum = null;
-      i=2;
+      i = 2;
     });
-
-
-
   }
+
   @override
   void deactivate() {
     // TODO: implement deactivate
@@ -103,7 +97,6 @@ _futureAlbum=null;
 
   @override
   Widget build(BuildContext context) {
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -118,7 +111,7 @@ _futureAlbum=null;
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: Container(
-                height: screenHeight * 0.3,
+                height: screenHeight * 0.2,
                 child: Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
@@ -133,17 +126,17 @@ _futureAlbum=null;
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: Colors.lightGreen,
-                  fontSize: 30,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold),
             )),
             SizedBox(
-              height: 10.0,
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
             Padding(
               padding: const EdgeInsets.only(
-                  top: 10.0, bottom: 10.0, left: 30.0, right: 30.0),
+                  top: 5.0, bottom: 5.0, left: 8.0, right: 8.0),
               child: TextField(
-                style: TextStyle(fontSize: 30.0),
+                style: TextStyle(fontSize: 20.0, color: Colors.orange),
                 maxLines: 1,
                 keyboardType: TextInputType.number,
                 controller: phnumberController,
@@ -156,13 +149,13 @@ _futureAlbum=null;
                       borderSide: const BorderSide(
                           color: Colors.lightGreen, width: 2.0),
                       borderRadius: const BorderRadius.all(
-                        const Radius.circular(30),
+                        const Radius.circular(20),
                       ),
                     ),
                     filled: true,
                     prefixIcon: Icon(
                       Icons.phone_iphone,
-                      size: 40.0,
+                      size: 30.0,
                       color: Colors.green,
                     ),
                     hintStyle: TextStyle(color: Colors.grey),
@@ -171,20 +164,25 @@ _futureAlbum=null;
               ),
             ),
             SizedBox(
-              height: 10.0,
+              height: MediaQuery.of(context).size.height * 0.02,
             ),
-            (_futureAlbum == null)? RaisedButton(
-                padding: const EdgeInsets.all(10.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                child: Text(
-                  " Get OTP",
-                  style: TextStyle(color: Colors.white, fontSize: 30.0),
-                ),
-                elevation: 7.0,
-                color: Colors.lightGreen,
-                onPressed:func,):i==0?buildFutureBuilder(context):Container(),
+            (_futureAlbum == null)
+                ? RaisedButton(
+                    padding: const EdgeInsets.all(5.0),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Text(
+                      " Get OTP",
+                      style: TextStyle(color: Colors.white, fontSize: 20.0),
+                    ),
+                    elevation: 7.0,
+                    color: Colors.lightGreen,
+                    onPressed: func,
+                  )
+                : i == 0
+                    ? buildFutureBuilder(context)
+                    : Container(),
           ],
         ),
       ),
@@ -196,29 +194,26 @@ _futureAlbum=null;
       future: _futureAlbum,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-        i=i+1;
-        WidgetsBinding.instance!.addPostFrameCallback((_){
-
+          i = i + 1;
+          WidgetsBinding.instance!.addPostFrameCallback((_) {
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                   return Center(
-                     child: OtpDialog(phnumberController.text.toString(),
+                  return Center(
+                    child: OtpDialog(phnumberController.text.toString(),
                         deviceId.toString()),
-                   );
+                  );
                 });
-
           });
-      //  Navigator.pop(contextw);
-       // Navigator.pop(widget.con);
+          //  Navigator.pop(contextw);
+          // Navigator.pop(widget.con);
 
         } else if (snapshot.hasError) {
-         // return Text('${snapshot.error}');
+          // return Text('${snapshot.error}');
         }
 
         return CircularProgressIndicator();
       },
     );
   }
-
 }

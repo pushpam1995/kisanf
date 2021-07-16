@@ -10,8 +10,7 @@ import 'checkoutScreenforbuyallitem.dart';
 class CustomerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return  CustomerScreenDesign();
-
+    return CustomerScreenDesign();
   }
 }
 
@@ -27,10 +26,11 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
       _futureAlbum = fetchcustomercategory();
     });
   }
- void customeritemforbuying(){
-   Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-     return ItemListInsideCustomerScreen();
-   }));
+
+  void customeritemforbuying() {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+      return ItemListInsideCustomerScreen();
+    }));
   }
 
   @override
@@ -39,20 +39,19 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
     super.initState();
     customerCategoryLoding();
   }
+
   @override
   Widget build(BuildContext context) {
     PreferredSizeWidget appBar = AppBar(
       title: Text("Customer Home"),
-     /* leading: IconButton(
+      /* leading: IconButton(
         icon: Icon(Icons.menu),
         onPressed: () {},
       ),*/
       centerTitle: true,
       actions: [
         IconButton(
-          onPressed: () {
-
-          },
+          onPressed: () {},
           icon: Icon(Icons.shopping_cart_outlined),
         ),
       ],
@@ -72,16 +71,20 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
               child: SizedBox(
                   height: height * 0.3,
                   width: double.infinity,
-                  child: Carousel(boxFit: BoxFit.fill,
+                  child: Carousel(
+                    boxFit: BoxFit.fill,
                     images: [
-                    /*  NetworkImage(
+                      /*  NetworkImage(
                           'https://cdn-images-1.medium.com/max/2000/1*GqdzzfB_BHorv7V2NV7Jgg.jpeg'),
                       NetworkImage(
                           'https://ibb.co/Kqg4NW6'),*/
-                      ExactAssetImage("images/Kisanlogoname.png"),
-                       ExactAssetImage("images/Kisanlogo75.png"),
-                     // ExactAssetImage("images/mapp.png"),
-
+                      ExactAssetImage("images/webslider1.png"),
+                      ExactAssetImage("images/webslider2.png"),
+                      ExactAssetImage("images/webslider3.png"),
+                      ExactAssetImage("images/webslider4.png"),
+                      ExactAssetImage("images/webslider5.png"),
+                      ExactAssetImage("images/webslider6.png"),
+                      // ExactAssetImage("images/mapp.png"),
                     ],
                     dotSize: 4.0,
                     dotSpacing: 15.0,
@@ -107,16 +110,18 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
                 ],
               ),
             ),
-            (_futureAlbum != null)? Container(
-              height: height * 0.45,
-              child: buildFutureBuilder(context),
-            ):Container(),
+            (_futureAlbum != null)
+                ? Container(
+                    height: height * 0.45,
+                    child: buildFutureBuilder(context),
+                  )
+                : Container(),
           ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-         /* BottomNavigationBarItem(
+          /* BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),*/
@@ -137,7 +142,7 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
   }
 
   void _onItemTapped(int index) {
-    if(index==0){
+    if (index == 0) {
       setState(() {
         _selectedIndex = index;
         Navigator.of(context).push(MaterialPageRoute(builder: (_) {
@@ -145,32 +150,33 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
         }));
       });
     }
-    if(index==1){
+    if (index == 1) {
       setState(() {
         _selectedIndex = index;
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => CheckOutScreenForBuyAllItem()),
+          MaterialPageRoute(
+              builder: (context) => CheckOutScreenForBuyAllItem()),
         );
       });
     }
-
   }
+
   FutureBuilder<CustomerCategoryModel> buildFutureBuilder(contextw) {
     return FutureBuilder<CustomerCategoryModel>(
       future: _futureAlbum,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-
           return ListView.builder(
             itemCount: snapshot.data!.payload.length,
             itemBuilder: (context, index) {
-              return GestureDetector(onTap: customeritemforbuying,
+              return GestureDetector(
+                onTap: customeritemforbuying,
                 child: Container(
                   margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: Center(
                     child: Text(
-                     snapshot.data!.payload.elementAt(index).name,
+                      snapshot.data!.payload.elementAt(index).name,
                       style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
@@ -183,15 +189,14 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
                       borderRadius: BorderRadius.circular(13),
                       color: Colors.blue,
                       image: DecorationImage(
-                          image: new NetworkImage(
-                              "put your image link"),
+                          image: new NetworkImage("put your image link"),
                           fit: BoxFit.fill)),
                 ),
               );
             },
           );
-               } else if (snapshot.hasError) {
-           return Center(child: Text('${snapshot.error}'));
+        } else if (snapshot.hasError) {
+          return Center(child: Text('${snapshot.error}'));
         }
 
         return Center(child: CircularProgressIndicator());
