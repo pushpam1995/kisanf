@@ -47,6 +47,7 @@ class _FarmerShopState extends State<FarmerShop> {
   Widget build(BuildContext context) {
     PreferredSizeWidget appBar = AppBar(
       title: Text("Shop Home"),
+      automaticallyImplyLeading: false,
       /*   leading: IconButton(
         icon: Icon(Icons.menu),
         onPressed: () {},

@@ -44,6 +44,7 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
   Widget build(BuildContext context) {
     PreferredSizeWidget appBar = AppBar(
       title: Text("Customer Home"),
+      automaticallyImplyLeading: false,
       /* leading: IconButton(
         icon: Icon(Icons.menu),
         onPressed: () {},

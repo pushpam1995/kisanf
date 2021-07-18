@@ -91,7 +91,8 @@ class _FarmerScreenDesignState extends State<FarmerScreenDesign> {
   Widget build(BuildContext context) {
     PreferredSizeWidget appBar = AppBar(
       title: Text("Farmer Home"),
-      /*   leading: IconButton(
+
+automaticallyImplyLeading: false,      /*   leading: IconButton(
         icon: Icon(Icons.menu),
         onPressed: () {},
       ),*/
