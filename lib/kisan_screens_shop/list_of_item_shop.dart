@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:kisan_dost_app/kisan_screens_farmer/listitem/transaction.dart';
+import 'package:kisan_dost_app/getcategoryitem/getcategoryitemservice.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/drop_down.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/popup_fragment.dart';
+import 'package:kisan_dost_app/kisan_screens_shop/transaction.dart';
 import 'package:kisan_dost_app/postshopitemandgettheresponse/postshopitemmodel.dart';
 import 'package:kisan_dost_app/postshopitemandgettheresponse/postshopitemservice.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'additempopup.dart';
 import 'coustom_ltem_item.dart';
-import 'inputfieldpage.dart';
 import 'list_category.dart';
 
 /// This is the main application widget.
@@ -23,13 +24,13 @@ class MyApplist extends StatefulWidget {
 class MyAppState extends State<MyApplist> {
   TextEditingController textEditingControllerName = new TextEditingController();
   TextEditingController textEditingControllerDescription =
-      new TextEditingController();
+  new TextEditingController();
   TextEditingController textEditingControllerShopId =
-      new TextEditingController();
+  new TextEditingController();
   TextEditingController textEditingControllerPrice =
-      new TextEditingController();
+  new TextEditingController();
   TextEditingController textEditingControllerQuantity =
-      new TextEditingController();
+  new TextEditingController();
   late String name;
   late String descripton;
   late String shopId;
@@ -37,39 +38,51 @@ class MyAppState extends State<MyApplist> {
   late String quantity;
   String dropdownValue = 'Category one';
   final _formKey = GlobalKey();
+  int cat = 0;
 
+  List<Transaction> transaction = [];
 
-  List<Transaction> transaction = [
-    Transaction(category: 'Rice', price: 999000, title: "The Food"),
-    Transaction(category: 'Rice', price: 999000, title: "The Food"),
-    Transaction(category: 'Rice', price: 999000, title: "The Food"),
-    Transaction(category: 'Rice', price: 999000, title: "The Food"),
-    Transaction(category: 'Rice', price: 999000, title: "The Food"),
-    Transaction(category: 'Rice', price: 999000, title: "The Food"),
-  ];
-
-  addNewItem(Transaction trns) {
+  void addNewItem(Transaction trns) {
     setState(() {
       transaction.add(trns);
     });
   }
+
   String a = "Choose Category";
+
   void changeCat(value) {
     setState(() {
       a = value;
     });
   }
 
-
-  void handleClick(value, index) {
+  void handleClick(value, index, itemid, shopId, categoryId, quantity, category,
+      details, name, price) {
     if (value == "Edit")
       showDialog(
           context: context,
           builder: (BuildContext context) {
             return CustomDialogBox(
-              title: "Edit Item Details",
+              headline: "Edit Item Details",
               descriptions: "This item will be Reflect on your item",
               text: "Post",
+              itemId: itemid,
+              shopId
+              :shopId,
+              categoryId
+              :categoryId,
+              quantity
+              :quantity,
+              category
+              :category,
+              details
+              :details,
+              name
+              :name,
+              price
+              :price,
+
+
             );
           });
     if (value == "Delete") {
@@ -83,7 +96,37 @@ class MyAppState extends State<MyApplist> {
     setState(() {});
   }
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final pref = SharedPreferences.getInstance();
+    pref.then((value) {
+      cat = value.getInt("SHOPCATEGORY");
+      cat = 1;
+      fetchcategoryitem(cat.toString()).then((value) {
+        print("cat value pass by the function : $cat");
+        print("payload should be not null : ${value.payload.length}");
+        value.payload.forEach((element) {
+          //  Transaction(category: element.categoryId.toString(),title: element.name,price:500);
 
+          // if(cat!=0 && element.categoryId==cat) {
+          setState(() {
+            transaction.add(Transaction(
+                category: element.description.toString(),
+                title: element.name,
+                price: element.unitPrice,
+                quantity: element.quantity,
+                categoryId: element.categoryId,
+                description: element.description,
+                itemId: element.itemId,
+                shopId: element.shopId));
+          });
+          //  }
+        });
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +139,8 @@ class MyAppState extends State<MyApplist> {
         padding: const EdgeInsets.all(8.0),
         itemExtent: 220.0,
         itemBuilder: (ctx, index) {
-          print("index value while before adding item: " + index.toString());
-          return Card(
+          return (cat != 0) && (transaction.length != 0)
+              ? Card(
             shadowColor: Colors.lightGreenAccent,
             child: CustomListItem(
               popup: handleClick,
@@ -105,13 +148,31 @@ class MyAppState extends State<MyApplist> {
               title: transaction[index].title,
               price: transaction[index].price,
               category: transaction[index].category,
+              quantity: transaction[index].quantity,
+              categoryId: transaction[index].categoryId,
+              description: transaction[index].description,
+              itemId: transaction[index].itemId,
+              shopId: transaction[index].shopId,
               thumbnail: Container(
-                decoration: const BoxDecoration(color: Colors.blue),
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    image: DecorationImage(
+                        image: new NetworkImage(
+                            "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/MDA2018_inline_03.jpg"),
+                        fit: BoxFit.fill)),
               ),
             ),
-          );
+          )
+              : (cat != 0) && (transaction.length == 0)
+              ? Center(
+            child: Text(
+              "No Data Available under this category.",
+              style: TextStyle(color: Colors.yellow, fontSize: 30),
+            ),
+          )
+              : CircularProgressIndicator();
         },
-        itemCount: transaction.length,
+        itemCount: (transaction.length != 0) ? transaction.length : 1,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton(
@@ -131,9 +192,10 @@ class MyAppState extends State<MyApplist> {
                   title: "Add Item Details",
                   descriptions: "This item will be Reflect on your item List",
                   text: "Add Item",
+                  addItem: addNewItem,
                 );
               });
-         /* showDialog(
+          /* showDialog(
               context: context,
               builder: (BuildContext context) {
                 return AlertDialog(
@@ -244,8 +306,4 @@ class MyAppState extends State<MyApplist> {
       ),
     );
   }
-
-
-
-
 }

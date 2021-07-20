@@ -3,13 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:kisan_dost_app/getcategoryresponseshop/shopcategorymodel.dart';
 import 'package:kisan_dost_app/getcategoryresponseshop/shopcategoryservices.dart';
 import 'package:kisan_dost_app/kisan_screens_farmer/myCartDesign.dart';
-import 'package:kisan_dost_app/kisan_screens_farmer/myorderdesign.dart';
 import 'package:kisan_dost_app/kisan_screens_farmer/userprofile.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/list_of_item_shop.dart';
-
-import 'data_model_filling_file.dart';
-import 'imageload.dart';
-import 'navigation_drawer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FarmerShop extends StatefulWidget {
   @override
@@ -19,7 +15,12 @@ class FarmerShop extends StatefulWidget {
 class _FarmerShopState extends State<FarmerShop> {
   int _selectedIndex = 0;
   Future<ShopCategoryModel>? _futureAlbumShop;
-  void _shopItem(context) {
+
+  void _shopItem(context,categoryId) {
+    final pref=SharedPreferences.getInstance();
+    pref.then((value){
+      value.setInt("SHOPCATEGORY", categoryId);
+    });
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) {
@@ -103,7 +104,7 @@ class _FarmerShopState extends State<FarmerShop> {
                   )),
             ),
             Container(
-              height: height * 0.45,
+              height: MediaQuery.of(context).size.height*0.5,
               child: buildFutureBuilderShop(context),
             ),
           ],
@@ -163,7 +164,7 @@ class _FarmerShopState extends State<FarmerShop> {
             itemCount: snapshot.data!.payload.length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: () => _shopItem(context),
+                onTap: () => _shopItem(context,snapshot.data!.payload.elementAt(index).categoryId),
                 child: Container(
                   margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: Center(

@@ -7,6 +7,7 @@ import 'package:kisan_dost_app/getcategoryresponsefarmer/farmercategoryresponsem
 import 'package:kisan_dost_app/getcategoryresponsefarmer/farmercategoryresponseservices.dart';
 import 'package:kisan_dost_app/getcategoryresponseshop/shopcategorymodel.dart';
 import 'package:kisan_dost_app/getcategoryresponseshop/shopcategoryservices.dart';
+import 'package:kisan_dost_app/kisan_screens/otp_screen.dart';
 import 'package:kisan_dost_app/kisan_screens_farmer/userprofile.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/list_of_item_shop.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -38,6 +39,7 @@ class _FarmerScreenDesignState extends State<FarmerScreenDesign> {
   Future<FarmerCategoryResponseModel>? _futureAlbum;
   Future<CustomerCategoryModel>? _futureAlbumCustomer;
   Future<ShopCategoryModel>? _futureAlbumShop;
+   SharedPreferences? UserData;
   void farmerCategoryLoding() {
     setState(() {
       _futureAlbum = fetchfarmercategory();
@@ -56,6 +58,11 @@ class _FarmerScreenDesignState extends State<FarmerScreenDesign> {
     });
   }
 
+  void logOut() async{
+
+    UserData = await SharedPreferences.getInstance();
+  }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -63,6 +70,7 @@ class _FarmerScreenDesignState extends State<FarmerScreenDesign> {
     farmerCategoryLoding();
     customerCategoryLoding();
     shopCategoryLoding();
+    logOut();
   }
 
   void purchaseIitemList(index) {
@@ -100,9 +108,13 @@ automaticallyImplyLeading: false,      /*   leading: IconButton(
       actions: [
         IconButton(
           onPressed: () {
-            /* Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-              return ItemListInsidePurchase();
-            }));*/
+
+            UserData!.clear();
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+              return OtpVerify(context);
+
+            }));
+        //    Navigator.pop(context);
           },
           icon: Icon(Icons.logout),
         ),

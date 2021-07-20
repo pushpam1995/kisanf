@@ -4,7 +4,8 @@ class Transaction {
   final String title;
   final String category;
   final double price;
+  final int quantity;
 
   Transaction(
-      {required this.title, required this.category, required this.price});
+      {required this.quantity,required this.title, required this.category, required this.price});
 }

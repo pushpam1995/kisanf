@@ -15,15 +15,16 @@ class ItemListInsideCustomerScreen extends StatelessWidget {
 class ItemListInsideCustomerScreenDesign extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.shopping_cart),
-          onPressed: () {},
-        ),
-        title: Text("Buy Item"),
-        centerTitle: true,
+    final PreferredSizeWidget appBar=AppBar(
+      leading: IconButton(
+        icon: Icon(Icons.shopping_cart),
+        onPressed: () {},
       ),
+      title: Text("Buy Item"),
+      centerTitle: true,
+    );
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -37,42 +38,9 @@ class ItemListInsideCustomerScreenDesign extends StatelessWidget {
                 },
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: ConstrainedBox(
-                // width: double.infinity,
-                //height: 80,
-                // padding: EdgeInsets.all(10.0),
-                constraints:
-                    BoxConstraints.tightFor(width: double.infinity, height: 50),
-                child: Center(
-                  child: TextField(
-                    maxLength: 25,
-                    //   maxLengthEnforced: true,
-                    textAlign: TextAlign.center,
-                    autocorrect: true,
-                    decoration: InputDecoration(
-                      //  hintText: 'Type Text Here...',
-                      hintStyle: TextStyle(
-                        color: Colors.grey,
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey, prefixIcon: Icon(Icons.search),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        borderSide: BorderSide(color: Colors.grey, width: 2),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(30.0)),
-                        borderSide: BorderSide(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+
             Container(
-              height: MediaQuery.of(context).size.height - 188,
+              height: MediaQuery.of(context).size.height-appBar.preferredSize.height-MediaQuery.of(context).padding.top,
               child: MyApp(),
             ),
           ],

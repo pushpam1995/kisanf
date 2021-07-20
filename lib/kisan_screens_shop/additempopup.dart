@@ -1,8 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kisan_dost_app/kisan_screens_shop/transaction.dart';
 import 'package:kisan_dost_app/postshopitemandgettheresponse/postshopitemmodel.dart';
 import 'package:kisan_dost_app/postshopitemandgettheresponse/postshopitemservice.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
 import 'drop_down.dart';
@@ -10,30 +12,34 @@ import 'list_category.dart';
 
 class CustomDialogBoxForAddingItem extends StatefulWidget {
   final String title, descriptions, text;
-
-
+  final Function addItem;
 
   const CustomDialogBoxForAddingItem(
-      { required this.title, required this.descriptions, required this.text});
+      {required this.addItem,
+      required this.title,
+      required this.descriptions,
+      required this.text});
 
   @override
   _CustomDialogBoxState createState() => _CustomDialogBoxState();
 }
 
 class _CustomDialogBoxState extends State<CustomDialogBoxForAddingItem> {
-  String a="";
-  void setCategorySelection(value){
-    a=value;
+  String a = "";
+
+  void setCategorySelection(value) {
+    a = value;
   }
+
   TextEditingController textEditingControllerName = new TextEditingController();
   TextEditingController textEditingControllerDescription =
-  new TextEditingController();
+      new TextEditingController();
   TextEditingController textEditingControllerShopId =
-  new TextEditingController();
+      new TextEditingController();
   TextEditingController textEditingControllerPrice =
-  new TextEditingController();
+      new TextEditingController();
   TextEditingController textEditingControllerQuantity =
-  new TextEditingController();
+      new TextEditingController();
   late String name;
   late String descripton;
   late var shopId;
@@ -41,18 +47,32 @@ class _CustomDialogBoxState extends State<CustomDialogBoxForAddingItem> {
   late var quantity;
 
   Future<PostShopItemModel>? _futureAlbum;
+
   //_futureAlbum=null;
-  void postItemOnServer(String name,String description, shopid, price, quantity, category){
-    _futureAlbum=null;
+  void postItemOnServer(
+      String name, String description, shopid, price, quantity, category) {
+final pref=SharedPreferences.getInstance();
+pref.then((value){
+ /* if(category==value.getInt("SHOPCATEGORY")) {
+    widget.addItem(Transaction(
+        price: double.parse(price),
+        category: descripton,
+        title: name,
+    categoryId: category,
+    description: descripton,
+    itemId: ,
+     shopId: ,
+    quantity: int.parse(quantity)));
+  }*/
+});
+
+
+    _futureAlbum = null;
     setState(() {
-      _futureAlbum=postItemDetails(name,description,shopid,price,quantity,category);
+      _futureAlbum =
+          postItemDetails(name, description, shopid, price, quantity, category);
     });
-
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -92,42 +112,38 @@ class _CustomDialogBoxState extends State<CustomDialogBoxForAddingItem> {
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextFormField(
-                      decoration: InputDecoration(
-                          hintText: "Name of an item"),
+                      decoration: InputDecoration(hintText: "Name of an item"),
                       controller: textEditingControllerName,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextFormField(
-                      decoration: InputDecoration(
-                          hintText: "description of an item"),
+                      decoration:
+                          InputDecoration(hintText: "description of an item"),
                       controller: textEditingControllerDescription,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextFormField(
-                      decoration:
-                      InputDecoration(hintText: "Shop id"),
+                      decoration: InputDecoration(hintText: "Shop id"),
                       controller: textEditingControllerShopId,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextFormField(
-                      decoration:
-                      InputDecoration(hintText: "price per kg"),
+                      decoration: InputDecoration(hintText: "price per kg"),
                       controller: textEditingControllerPrice,
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(8.0),
                     child: TextFormField(
-                      decoration: InputDecoration(
-                          hintText: "Quantity Available"),
+                      decoration:
+                          InputDecoration(hintText: "Quantity Available"),
                       controller: textEditingControllerQuantity,
-
                     ),
                   ),
                   SizedBox(
@@ -145,27 +161,31 @@ class _CustomDialogBoxState extends State<CustomDialogBoxForAddingItem> {
                   SizedBox(
                     height: 22,
                   ),
-                  (_futureAlbum==null)? Align(
-                    alignment: Alignment.bottomRight,
-                    child: FlatButton(
-                        onPressed: () {
-                          name=textEditingControllerName.text;
-                          descripton=textEditingControllerDescription.text;
-                          shopId=(textEditingControllerShopId.text);
-                          price=(textEditingControllerPrice.text);
-                          quantity=(textEditingControllerQuantity.text);
-                          var category=Category().mapcategorytonum[a];
+                  (_futureAlbum == null)
+                      ? Align(
+                          alignment: Alignment.bottomRight,
+                          child: FlatButton(
+                              onPressed: () {
+                                name = textEditingControllerName.text;
+                                descripton =
+                                    textEditingControllerDescription.text;
+                                shopId = (textEditingControllerShopId.text);
+                                price = (textEditingControllerPrice.text);
+                                quantity = (textEditingControllerQuantity.text);
+                                var category = Category().mapcategorytonum[a];
 
-                          postItemOnServer(name,descripton,shopId,price,quantity,category!);
+                                postItemOnServer(name, descripton, shopId,
+                                    price, quantity, category!);
 
-                          // print("$name, $descripton, $shopId, $price, $price, $quantity, $a, $va");
-                          //Navigator.of(context).pop();
-                        },
-                        child: Text(
-                          widget.text,
-                          style: TextStyle(fontSize: 18),
-                        )),
-                  ):buildFutureBuilder(context),
+                                // print("$name, $descripton, $shopId, $price, $price, $quantity, $a, $va");
+                                //Navigator.of(context).pop();
+                              },
+                              child: Text(
+                                widget.text,
+                                style: TextStyle(fontSize: 18),
+                              )),
+                        )
+                      : buildFutureBuilder(context),
                 ],
               ),
             ),
@@ -177,9 +197,9 @@ class _CustomDialogBoxState extends State<CustomDialogBoxForAddingItem> {
                 radius: Constants.avatarRadius,
                 child: ClipRRect(
                   borderRadius:
-                  BorderRadius.all(Radius.circular(Constants.avatarRadius)),
+                      BorderRadius.all(Radius.circular(Constants.avatarRadius)),
                   child: //Image.asset("assets/model.jpeg")
-                  Image.network(
+                      Image.network(
                     'https://cdn.pixabay.com/photo/2018/07/11/21/51/toast-3532016_1280.jpg',
                     //  height: 250,
                   ),
@@ -192,37 +212,37 @@ class _CustomDialogBoxState extends State<CustomDialogBoxForAddingItem> {
     );
   }
 
-
-
   FutureBuilder<PostShopItemModel> buildFutureBuilder(contextw) {
     return FutureBuilder<PostShopItemModel>(
       future: _futureAlbum,
       builder: (context, snapshot) {
         print("${snapshot.data}");
         if (snapshot.hasData) {
-        /*  WidgetsBinding.instance!.addPostFrameCallback((_) {
+          /*  WidgetsBinding.instance!.addPostFrameCallback((_) {
             setState(() {
               _futureAlbum = null;
             });
           });*/
+
+
           textEditingControllerQuantity.clear();
           textEditingControllerPrice.clear();
           textEditingControllerShopId.clear();
           textEditingControllerDescription.clear();
           textEditingControllerName.clear();
+
           return Text("item added successfully");
           //Navigator.pop(contextw);
         } else if (snapshot.hasError) {
           print("inside  else if (snapshot.hasError)");
-           return Text('${snapshot.error}');
+          return Text('${snapshot.error}');
         }
 
         return CircularProgressIndicator();
       },
     );
     setState(() {
-      _futureAlbum=null;
+      _futureAlbum = null;
     });
   }
-
 }

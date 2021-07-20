@@ -10,13 +10,14 @@ class CustomListItem extends StatefulWidget {
     required this.title,
     required this.category,
     required this.price,
-    required this.index,
+    required this.index, required this.quantity,
   });
  final int index;
   final Widget thumbnail;
   final String title;
   final String category;
   final double price;
+  final int quantity;
 
   @override
   _CustomListItemState createState() => _CustomListItemState();
@@ -40,6 +41,7 @@ class _CustomListItemState extends State<CustomListItem> {
               title: widget.title,
               category: widget.category,
               price: widget.price,
+              Aquantity: widget.quantity,
             ),
           ),
           //vertical dot...

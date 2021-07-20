@@ -47,7 +47,7 @@ class Payload {
   String description;
   int shopId;
   int categoryId;
-  int unitPrice;
+  double unitPrice;
   String unit;
   int quantity;
   dynamic imageUrl;

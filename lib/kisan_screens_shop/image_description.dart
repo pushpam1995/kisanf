@@ -7,11 +7,21 @@ class VideoDescription extends StatefulWidget {
     required this.title,
     required this.category,
     required this.price,
+    required this.shopId,
+    required this.itemId,
+    required this.description,
+    required this.categoryId,
+    required this.quantity
   });
 
   final String title;
   final String category;
   final double price;
+  final int itemId;
+  final String description;
+  final int shopId;
+  final int categoryId;
+  final int quantity;
 
   @override
   _VideoDescriptionState createState() => _VideoDescriptionState();

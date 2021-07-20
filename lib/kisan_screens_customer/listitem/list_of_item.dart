@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kisan_dost_app/kisan_screens_farmer/listitem/transaction.dart';
+import 'package:kisan_dost_app/getcategoryitem/getcategoryitemservice.dart';
+import 'package:kisan_dost_app/kisan_screens_customer/listitem/transaction.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 
 import 'coustom_ltem_item.dart';
@@ -12,14 +15,8 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
-  List<Transaction> transaction = [
-    Transaction(category: 'Fruits', price: 500, title: "java plum"),
-    Transaction(category: 'Vegetables', price: 200, title: "Cauliflower."),
-    Transaction(category: 'Nuts', price: 1500, title: "TPistachios"),
-    Transaction(category: 'Nuts', price: 2000, title: "Marcona Almonds."),
-    Transaction(category: 'Vegetables', price: 100, title: "green pepper"),
-    Transaction(category: 'Fruits', price: 600, title: "Indian gooseberry"),
-  ];
+  int cat=0;
+  List<Transaction> transaction = [];
 
   addNewItem(Transaction trns) {
     setState(() {
@@ -30,6 +27,38 @@ class MyAppState extends State<MyApp> {
   void categorySelect(value) {
     setState(() {});
   }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    final pref=SharedPreferences.getInstance();
+    pref.then((value){
+      setState(() {
+        //cat=value.getInt("CATEGORYID");
+        cat=1;
+      });
+      fetchcategoryitem(cat.toString()).then((value) {
+        print("cat value pass by the function : $cat");
+        print("payload should be not null : ${value.payload.length}");
+        value.payload.forEach((element) {
+          //  Transaction(category: element.categoryId.toString(),title: element.name,price:500);
+
+
+          // if(cat!=0 && element.categoryId==cat) {
+          setState(() {
+            transaction.add(Transaction(category: element.description.toString(),
+                title: element.name,
+                price: element.unitPrice,quantity: element.quantity));
+          });
+          //  }
+
+        });
+
+      });
+
+
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,31 +67,27 @@ class MyAppState extends State<MyApp> {
         padding: const EdgeInsets.all(8.0),
         itemExtent: 220.0,
         itemBuilder: (ctx, index) {
-          print("index value while before adding item: " + index.toString());
-          return GestureDetector(onTap: (){
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => OnClickOfListItemCustomerScreen()));
-          },
-            child: Card(
-              shadowColor: Colors.lightGreenAccent,
-              child: CustomListItem(
-                index: index,
-                title: transaction[index].title,
-                price: transaction[index].price,
-                category: transaction[index].category,
-                thumbnail: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.blue,
-                      image: DecorationImage(
-                          image: new NetworkImage(
-                              "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/MDA2018_inline_03.jpg"),
-                          fit: BoxFit.fill)),
-                ),
+          return (cat!=0) && (transaction.length!=0)?
+          Card(
+            shadowColor: Colors.lightGreenAccent,
+            child: CustomListItem(
+              index: index,
+              title: transaction[index].title,
+              price: transaction[index].price,
+              category: transaction[index].category,
+              quantity: transaction[index].quantity,
+              thumbnail: Container(
+                decoration: BoxDecoration(
+                    color: Colors.blue,
+                    image: DecorationImage(
+                        image: new NetworkImage(
+                            "https://storage.googleapis.com/gd-wagtail-prod-assets/original_images/MDA2018_inline_03.jpg"),
+                        fit: BoxFit.fill)),
               ),
             ),
-          );
+          ):(cat!=0) && (transaction.length==0)?Center(child: Text("No Data Available under this category.",style: TextStyle(color: Colors.yellow,fontSize: 30),),):CircularProgressIndicator();
         },
-        itemCount: transaction.length,
+        itemCount: (transaction.length!=0)?transaction.length:1,
       ),
     );
   }

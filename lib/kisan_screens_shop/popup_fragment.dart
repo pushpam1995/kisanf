@@ -1,22 +1,50 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kisan_dost_app/kisan_screens_shop/list_category.dart';
+import 'package:kisan_dost_app/kisan_screens_shop/transaction.dart';
+import 'package:kisan_dost_app/updateitem/updateimetmodel.dart';
+import 'package:kisan_dost_app/updateitem/updateitemservice.dart';
 
 import 'constants.dart';
 import 'drop_down.dart';
 
 class CustomDialogBox extends StatefulWidget {
-  final String title, descriptions, text;
+  final String headline, descriptions, text;
+  final String name;
+  final String category;
+  final double price;
+  final int quantity;
+  final int itemId;
+  final String details;
+  final int shopId;
+  final int categoryId;
 
-
-  const CustomDialogBox(
-      { required this.title, required this.descriptions, required this.text,});
+  const CustomDialogBox({
+    required this.quantity,
+    required this.details,
+    required this.shopId,
+    required this.categoryId,
+    required this.name,
+    required this.category,
+    required this.price,
+    required this.itemId,
+    required this.headline,
+    required this.descriptions,
+    required this.text,
+  });
 
   @override
   _CustomDialogBoxState createState() => _CustomDialogBoxState();
 }
 
 class _CustomDialogBoxState extends State<CustomDialogBox> {
+  String categorySelected = "";
+  Future<UpdateItemModel>? _futureAlbum;
+  TextEditingController textEditingControllerName = new TextEditingController();
+  TextEditingController textEditingControllerAmount =
+      new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -28,7 +56,26 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
       child: contentBox(context),
     );
   }
-  void noUseFunction(value){
+
+  void noUseFunction(value) {
+    setState(() {
+      categorySelected = value;
+    });
+  }
+
+  sendAllDataForUpdation() {
+    print(
+        "inside sendAllDataForUpdation ${widget.itemId}, ${widget.name}, ${widget.details}, ${widget.shopId}, ${widget.price}, ${widget.quantity}, ${widget.categoryId}");
+    setState(() {
+      _futureAlbum = updateItem(
+          widget.itemId,
+          textEditingControllerName.text,
+          widget.details,
+          widget.shopId,
+          double.parse(textEditingControllerAmount.text),
+          widget.quantity,
+          Category().mapcategorytonum[categorySelected]);
+    });
 
   }
 
@@ -57,15 +104,16 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  widget.title,
+                  widget.headline,
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
                 ),
                 SizedBox(
                   height: 15,
                 ),
                 TextField(
+                  controller: textEditingControllerName,
                   decoration: InputDecoration(
-                    labelText: "Title",
+                    labelText: "name",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(
                         color: Colors.lightGreenAccent,
@@ -78,6 +126,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                   height: 15,
                 ),
                 TextField(
+                  controller: textEditingControllerAmount,
                   decoration: InputDecoration(
                     labelText: "Amount",
                     border: OutlineInputBorder(
@@ -91,7 +140,9 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                 SizedBox(
                   height: 15,
                 ),
-                DropDown(setcategoryaddress: noUseFunction,),
+                DropDown(
+                  setcategoryaddress: noUseFunction,
+                ),
                 SizedBox(
                   height: 15,
                 ),
@@ -105,14 +156,17 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                 ),
                 Align(
                   alignment: Alignment.bottomRight,
-                  child: FlatButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text(
-                        widget.text,
-                        style: TextStyle(fontSize: 18),
-                      )),
+                  child: (_futureAlbum == null)
+                      ? FlatButton(
+                          onPressed: () {
+                            sendAllDataForUpdation();
+                            // Navigator.of(context).pop();
+                          },
+                          child: Text(
+                            widget.text,
+                            style: TextStyle(fontSize: 18),
+                          ))
+                      : buildFutureBuilder(context),
                 ),
               ],
             ),
@@ -136,6 +190,21 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
           ),
         ],
       ),
+    );
+  }
+
+  FutureBuilder<UpdateItemModel> buildFutureBuilder(contextw) {
+    return FutureBuilder<UpdateItemModel>(
+      future: _futureAlbum,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Text("item added successfully");
+        } else if (snapshot.hasError) {
+          // return Text('${snapshot.error}');
+        }
+
+        return CircularProgressIndicator();
+      },
     );
   }
 }

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:kisan_dost_app/getcategoryresponsecustomer/customerresponsemodel.dart';
 import 'package:kisan_dost_app/getcategoryresponsecustomer/customerresponseservice.dart';
+import 'package:kisan_dost_app/kisan_screens/otp_screen.dart';
 import 'package:kisan_dost_app/kisan_screens_farmer/userprofile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ItemListInsideCustomerScreen.dart';
 import 'checkoutScreenforbuyallitem.dart';
@@ -21,16 +23,27 @@ class CustomerScreenDesign extends StatefulWidget {
 
 class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
   Future<CustomerCategoryModel>? _futureAlbum;
+  SharedPreferences? UserData;
+
   void customerCategoryLoding() {
     setState(() {
       _futureAlbum = fetchcustomercategory();
     });
   }
 
-  void customeritemforbuying() {
+  void customeritemforbuying(categoryId) {
+    final pref=SharedPreferences.getInstance();
+    pref.then((value) {
+      value.setInt("CATEGORYID", categoryId);
+
+    });
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return ItemListInsideCustomerScreen();
     }));
+  }
+
+  void logOut() async {
+    UserData = await SharedPreferences.getInstance();
   }
 
   @override
@@ -38,6 +51,7 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
     // TODO: implement initState
     super.initState();
     customerCategoryLoding();
+    logOut();
   }
 
   @override
@@ -52,8 +66,12 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
       centerTitle: true,
       actions: [
         IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.shopping_cart_outlined),
+          onPressed: () {
+            UserData!.clear();
+            Navigator.of(context).pushReplacement(
+                MaterialPageRoute(builder: (_) => OtpVerify(context)));
+          },
+          icon: Icon(Icons.logout),
         ),
       ],
     );
@@ -172,7 +190,8 @@ class _CustomerScreenDesignState extends State<CustomerScreenDesign> {
             itemCount: snapshot.data!.payload.length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                onTap: customeritemforbuying,
+                onTap: () => customeritemforbuying(
+                    snapshot.data!.payload.elementAt(index).categoryId),
                 child: Container(
                   margin: EdgeInsets.fromLTRB(20, 10, 20, 10),
                   child: Center(

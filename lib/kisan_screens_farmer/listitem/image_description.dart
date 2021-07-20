@@ -6,12 +6,13 @@ class VideoDescription extends StatefulWidget {
   VideoDescription({
     required this.title,
     required this.category,
-    required this.price,
+    required this.price, required this.Aquantity,
   });
 
   final String title;
   final String category;
   final double price;
+  final int Aquantity;
 
   @override
   _VideoDescriptionState createState() => _VideoDescriptionState();
@@ -99,7 +100,7 @@ class _VideoDescriptionState extends State<VideoDescription> {
                   .of(context)
                   .primaryColor, fontWeight: FontWeight.bold),),),*/
           Text(
-            "Available Quantity: 15 kg ",
+            "Available Quantity: ${widget.Aquantity} kg ",
             style: TextStyle(fontSize: 10.0),
           ),
           Row(

@@ -10,10 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:kisan_dost_app/getotpresponse/getotpresponsemodel.dart';
 import 'package:kisan_dost_app/getotpresponse/getotpresponseservice.dart';
 import 'package:kisan_dost_app/kisan_screens_customer/main.dart';
-import 'package:kisan_dost_app/kisan_screens_farmer/main.dart';
-import 'package:kisan_dost_app/kisan_screens_farmer/userprofile.dart';
 import 'package:kisan_dost_app/kisan_screens_shop/main123.dart';
-
 import 'otp_dialog_screen.dart';
 
 class OtpVerify extends StatefulWidget {
@@ -28,7 +25,7 @@ class _OtpVerifyState extends State<OtpVerify> {
   final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
   TextEditingController phnumberController = TextEditingController();
   Future<GetOtpModel>? _futureAlbum;
-  late String deviceId;
+  late String deviceId;                                                             
   int i = 0;
   //String phnumber, phoneNumber;
   //OtpModel userDetails = new OtpModel();
@@ -52,11 +49,11 @@ class _OtpVerifyState extends State<OtpVerify> {
 
   var otpGenerationResponse;
   void func() {
-    /*Navigator.push(
+   /* Navigator.push(
         context, MaterialPageRoute(builder: (context) => CustomerScreen()));*/
     /*  Navigator.push(
        context, MaterialPageRoute(builder: (context) => FarmerScreen()));*/
-    /*Navigator.push(
+   /* Navigator.push(
         context, MaterialPageRoute(builder: (context) => FarmerShop()));*/
     setState(() {
       i = 0;
@@ -101,6 +98,7 @@ class _OtpVerifyState extends State<OtpVerify> {
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: new AppBar(
+        automaticallyImplyLeading: false,
           backgroundColor: Colors.lightGreen,
           title: Text('Kisan Dosth',
               style: TextStyle(fontSize: 20.0, color: Colors.white))),

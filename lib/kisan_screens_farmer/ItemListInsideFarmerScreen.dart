@@ -36,7 +36,7 @@ class ItemListInsideFarmerScreenDesign extends StatelessWidget {
                 },
               ),
             ),
-            Padding(
+           /* Padding(
               padding: const EdgeInsets.all(15.0),
               child: ConstrainedBox(
                 // width: double.infinity,
@@ -69,7 +69,7 @@ class ItemListInsideFarmerScreenDesign extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
+            ),*/
             Container(
               height: MediaQuery.of(context).size.height - 188,
               child: MyApp(),

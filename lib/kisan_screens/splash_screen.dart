@@ -59,21 +59,21 @@ class _SplashScreenState extends State<SplashScreen>
     final userType = UserData.getString("userType") ?? 0;
     if (name == 0) {
       print("not a user");
-      Navigator.push(
+      Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => OtpVerify(context)));
     } else {
       print('user is there');
 
       if (userType == "FARMER") {
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => FarmerScreen()));
       }
       if (userType == "CUSTOMER") {
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => CustomerScreen()));
       }
       if (userType == "SHOP") {
-        Navigator.push(
+        Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => FarmerShop()));
       }
     }
